@@ -20,6 +20,7 @@ import org.example.travelexpertsfx.contexts.FeesContext;
 import org.example.travelexpertsfx.contexts.ITableContext;
 import org.example.travelexpertsfx.models.Agent;
 import org.example.travelexpertsfx.models.Fee;
+import org.example.travelexpertsfx.models.Mode;
 
 public class MainController {
 
@@ -84,7 +85,7 @@ public class MainController {
     private TableView<Fee> tbFee; // Value injected by FXMLLoader
 
     private ITableContext _currentContext;
-    private String mode;
+    private Mode mode;
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
@@ -151,7 +152,7 @@ public class MainController {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            mode = "Edit";
+                            mode = Mode.EDIT;
                             _currentContext.openDialog(t1, mode);
                         }
                     }); //whenever possible to run the task, run it
@@ -168,7 +169,7 @@ public class MainController {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            mode = "Edit";
+                            mode = Mode.EDIT;
                             _currentContext.openDialog(t1, mode);
                         }
                     }); //whenever possible to run the task, run it
@@ -179,7 +180,7 @@ public class MainController {
         btnAdd.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                mode = "Add";
+                mode = Mode.ADD;
                 _currentContext.openDialog(null, mode); // no item at beginning of add.
             }
         });
