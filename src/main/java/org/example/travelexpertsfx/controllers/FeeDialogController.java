@@ -21,10 +21,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.example.travelexpertsfx.data.FeeDB;
 import org.example.travelexpertsfx.models.Fee;
+import org.example.travelexpertsfx.models.Mode;
 
 import static org.example.travelexpertsfx.Validator.*;
 
-public class FeeDialogController {
+public class FeeDialogController extends BaseDialogController {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -55,7 +56,7 @@ public class FeeDialogController {
 
     @FXML // fx:id="tfFeeName"
     private TextField tfFeeName; // Value injected by FXMLLoader
-    private String mode; // either Add or Edit
+    private Mode mode; // either Add or Edit
 
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
@@ -95,32 +96,32 @@ public class FeeDialogController {
 
     private void buttonDeleteClicked() {
         int nrRows = 0;
-        mode = "Delete";
+        mode = Mode.DELETE;
         String feeId = tfFeeId.getText();
         try {
             nrRows = FeeDB.deleteFee(feeId);
         }
         catch(SQLIntegrityConstraintViolationException e){
-            displayAlert(Alert.AlertType.ERROR, "Cannot delete fee used in booking details.");
+            displayAlert(Alert.AlertType.ERROR, mode, "Cannot delete fee used in booking details.");
             return;
         }
         catch (SQLException e){
             throw new RuntimeException();
         }
         if(nrRows == 0){
-            displayAlert(Alert.AlertType.ERROR, "");
+            displayAlert(Alert.AlertType.ERROR, mode, "");
         } else { // successful
-            displayAlert(Alert.AlertType.CONFIRMATION, "");
+            displayAlert(Alert.AlertType.CONFIRMATION, mode, "");
         }
     }
 
-    public void setMode(String mode) {
+    public void setMode(Mode mode) {
         this.mode = mode;
         lblMode.setText(mode + " Fee");
         // adjust visibility of delete button
-        btnDelete.setVisible(!mode.equals("Add"));
+        btnDelete.setVisible(!mode.equals(Mode.ADD));
         // adjust if Fee ID is editable
-        if(mode.equals("Edit")){
+        if(mode.equals(Mode.EDIT)){
             tfFeeId.setEditable(false);
             tfFeeId.setDisable(true);
         }
@@ -132,14 +133,14 @@ public class FeeDialogController {
         try {
             lstFeeId = FeeDB.getExistingFeeIds();
         } catch (SQLException e) {
-            displayAlert(Alert.AlertType.ERROR, "Cannot retrieve fee ids.");
+            displayAlert(Alert.AlertType.ERROR, mode, "Cannot retrieve fee ids.");
             closeStage(mouseEvent);
         }
         boolean validatedInputs = validateFeeInputs(lstFeeId);
         if (validatedInputs) {
             Fee fee = collectFeeInfo();
             try {
-                if (mode.equals("Add")) {
+                if (mode.equals(Mode.ADD)) {
                     nrRows = FeeDB.insertFee(fee);
                 } else // edit
                 {
@@ -150,9 +151,9 @@ public class FeeDialogController {
             }
 
             if (nrRows == 0) {
-                displayAlert(Alert.AlertType.ERROR, "");
+                displayAlert(Alert.AlertType.ERROR, mode, "");
             } else { // successful
-                displayAlert(Alert.AlertType.CONFIRMATION, "");
+                displayAlert(Alert.AlertType.CONFIRMATION, mode, "");
                 closeStage(mouseEvent);
             }
         }
@@ -163,7 +164,7 @@ public class FeeDialogController {
         if(!validateNonEmptyEntry(tfFeeId)){
             errorMsg.append("Fee Id cannot be empty.\n");
         }
-        if (!validateEntryNotInList(tfFeeId, lstFeeId) && mode.equals("Add")) {
+        if (!validateEntryNotInList(tfFeeId, lstFeeId) && mode.equals(Mode.ADD)) {
             errorMsg.append("Fee Id cannot be one of the Fee Ids already used.\n");
         }
         if (!validateNonEmptyEntry(tfFeeName)) {
@@ -173,7 +174,7 @@ public class FeeDialogController {
             errorMsg.append("Fee Amount must be a positive double.");
         }
         if (!errorMsg.isEmpty()) {
-            displayAlert(Alert.AlertType.ERROR, String.valueOf(errorMsg));
+            displayAlert(Alert.AlertType.ERROR, mode, String.valueOf(errorMsg));
             return false;
         } else {
             return true;
@@ -192,35 +193,10 @@ public class FeeDialogController {
         );
     }
 
-    // close the window
-    private void closeStage(MouseEvent mouseEvent) {
-        Node node = (Node) mouseEvent.getSource();
-        Stage stage = (Stage) node.getScene().getWindow();
-        stage.close();
-    }
-
     public void displayFee(Fee fee) {
         tfFeeId.setText(fee.getFeeId());
         tfFeeName.setText(fee.getFeeName());
         tfFeeAmount.setText(fee.getFeeAmt()+"");
         tfFeeDescription.setText(fee.getFeeDesc());
     } // public because it's called from dialog controller
-
-    private void displayAlert(Alert.AlertType t, String msg){
-        String content = "";
-        Alert alert = new Alert(t);
-        if(t.equals(Alert.AlertType.ERROR)) {
-            alert.setHeaderText("Database Operation Error");
-            content = mode + " failed";
-        } else if (t.equals(Alert.AlertType.CONFIRMATION)){
-            alert.setHeaderText("Database Operation Success");
-            content = mode + " successful";
-        }
-        if(!msg.isEmpty()){
-            content += "\n"+msg;
-        }
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
 }

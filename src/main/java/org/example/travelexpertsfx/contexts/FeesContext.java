@@ -11,6 +11,7 @@ import org.example.travelexpertsfx.TravelExpertsApplication;
 import org.example.travelexpertsfx.controllers.FeeDialogController;
 import org.example.travelexpertsfx.data.FeeDB;
 import org.example.travelexpertsfx.models.Fee;
+import org.example.travelexpertsfx.models.Mode;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -35,7 +36,7 @@ public class FeesContext implements ITableContext {
     }
 
     @Override
-    public void openDialog(Object obj, String mode) {
+    public void openDialog(Object obj, Mode mode) {
         FXMLLoader fxmlLoader = new FXMLLoader(TravelExpertsApplication.class.getResource("fee-dialog-view.fxml"));
         Scene scene = null;
         try {
@@ -45,7 +46,7 @@ public class FeesContext implements ITableContext {
         }
         FeeDialogController dialogController = fxmlLoader.getController();
         dialogController.setMode(mode);
-        if(mode.equals("Edit")) { // fill the text fields in dialog
+        if(mode.equals(Mode.EDIT)) { // fill the text fields in dialog
             dialogController.displayFee((Fee) obj);
         }
         Stage stage = new Stage();

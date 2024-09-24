@@ -11,6 +11,7 @@ import org.example.travelexpertsfx.TravelExpertsApplication;
 import org.example.travelexpertsfx.controllers.AgentDialogController;
 import org.example.travelexpertsfx.data.AgentDB;
 import org.example.travelexpertsfx.models.Agent;
+import org.example.travelexpertsfx.models.Mode;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -35,7 +36,7 @@ public class AgentsContext implements ITableContext {
     }
 
     @Override
-    public void openDialog(Object obj, String mode) {
+    public void openDialog(Object obj, Mode mode) {
         FXMLLoader fxmlLoader = new FXMLLoader(TravelExpertsApplication.class.getResource("agent-dialog-view.fxml"));
         Scene scene = null;
         try {
@@ -45,7 +46,7 @@ public class AgentsContext implements ITableContext {
         }
         AgentDialogController dialogController = fxmlLoader.getController();
         dialogController.setMode(mode);
-        if(mode.equals("Edit")) { // fill the text fields in dialog
+        if(mode.equals(Mode.EDIT)) { // fill the text fields in dialog
             dialogController.displayAgent((Agent) obj);
         }
         Stage stage = new Stage();
