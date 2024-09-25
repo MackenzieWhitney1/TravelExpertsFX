@@ -12,20 +12,18 @@ import java.util.ResourceBundle;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import org.example.travelexpertsfx.data.FeeDB;
 import org.example.travelexpertsfx.models.Fee;
-import org.example.travelexpertsfx.models.Mode;
+import org.example.travelexpertsfx.Mode;
 
 import static org.example.travelexpertsfx.Validator.*;
 
-public class FeeDialogController extends BaseDialogController {
+public class FeeDialogController extends BaseDialogController<Fee, String> {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -74,6 +72,7 @@ public class FeeDialogController extends BaseDialogController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 buttonSaveClicked(mouseEvent);
+                closeStage(mouseEvent);
             }
         });
 
@@ -94,25 +93,23 @@ public class FeeDialogController extends BaseDialogController {
 
     }
 
-    private void buttonDeleteClicked() {
-        int nrRows = 0;
-        mode = Mode.DELETE;
-        String feeId = tfFeeId.getText();
+    private void buttonSaveClicked(MouseEvent mouseEvent) {
         try {
-            nrRows = FeeDB.deleteFee(feeId);
+            SaveEntity(
+                    collectFeeInfo(),
+                    FeeDB::insertFee,
+                    FeeDB::updateFee,
+                    Fee::getFeeId,
+                    validateFeeInputs(),
+                    mode);
+        } catch (SQLException e){
+            displayAlert(Alert.AlertType.ERROR, mode, "Database error: " + e.getMessage());
         }
-        catch(SQLIntegrityConstraintViolationException e){
-            displayAlert(Alert.AlertType.ERROR, mode, "Cannot delete fee used in booking details.");
-            return;
-        }
-        catch (SQLException e){
-            throw new RuntimeException();
-        }
-        if(nrRows == 0){
-            displayAlert(Alert.AlertType.ERROR, mode, "");
-        } else { // successful
-            displayAlert(Alert.AlertType.CONFIRMATION, mode, "");
-        }
+    }
+
+    private void buttonDeleteClicked() {
+        String feeId = tfFeeId.getText();
+        DeleteEntity(feeId, FeeDB::deleteFee);
     }
 
     public void setMode(Mode mode) {
@@ -127,43 +124,18 @@ public class FeeDialogController extends BaseDialogController {
         }
     }
 
-    private void buttonSaveClicked(MouseEvent mouseEvent) {
-        int nrRows = 0;
+    private boolean validateFeeInputs() throws SQLException {
         ArrayList<String> lstFeeId = null;
         try {
             lstFeeId = FeeDB.getExistingFeeIds();
         } catch (SQLException e) {
             displayAlert(Alert.AlertType.ERROR, mode, "Cannot retrieve fee ids.");
-            closeStage(mouseEvent);
         }
-        boolean validatedInputs = validateFeeInputs(lstFeeId);
-        if (validatedInputs) {
-            Fee fee = collectFeeInfo();
-            try {
-                if (mode.equals(Mode.ADD)) {
-                    nrRows = FeeDB.insertFee(fee);
-                } else // edit
-                {
-                    nrRows = FeeDB.updateFee(fee.getFeeId(), fee);
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
-            if (nrRows == 0) {
-                displayAlert(Alert.AlertType.ERROR, mode, "");
-            } else { // successful
-                displayAlert(Alert.AlertType.CONFIRMATION, mode, "");
-                closeStage(mouseEvent);
-            }
-        }
-    }
-
-    private boolean validateFeeInputs(ArrayList<String> lstFeeId) {
         StringBuilder errorMsg = new StringBuilder();
         if(!validateNonEmptyEntry(tfFeeId)){
             errorMsg.append("Fee Id cannot be empty.\n");
         }
+        assert lstFeeId != null;
         if (!validateEntryNotInList(tfFeeId, lstFeeId) && mode.equals(Mode.ADD)) {
             errorMsg.append("Fee Id cannot be one of the Fee Ids already used.\n");
         }

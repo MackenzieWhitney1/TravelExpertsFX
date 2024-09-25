@@ -1,4 +1,4 @@
-package org.example.travelexpertsfx.models;
+package org.example.travelexpertsfx;
 
 public enum Mode {
     ADD, EDIT, DELETE

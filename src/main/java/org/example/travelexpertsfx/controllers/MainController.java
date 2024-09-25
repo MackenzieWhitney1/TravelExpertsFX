@@ -20,7 +20,7 @@ import org.example.travelexpertsfx.contexts.FeesContext;
 import org.example.travelexpertsfx.contexts.ITableContext;
 import org.example.travelexpertsfx.models.Agent;
 import org.example.travelexpertsfx.models.Fee;
-import org.example.travelexpertsfx.models.Mode;
+import org.example.travelexpertsfx.Mode;
 
 public class MainController {
 
