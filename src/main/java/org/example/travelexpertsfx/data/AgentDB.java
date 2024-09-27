@@ -2,45 +2,18 @@ package org.example.travelexpertsfx.data;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.example.travelexpertsfx.DatabaseHelper;
 import org.example.travelexpertsfx.models.Agent;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Properties;
 
 public class AgentDB {
-    public static Connection getConnection(){
-        String url = "";
-        String user = "";
-        String password = "";
-        // retrieve connection information from properties file
-        try{
-            FileInputStream fileInputStream = new FileInputStream("c:\\connection.properties");
-            Properties prop = new Properties();
-            prop.load(fileInputStream);
-            url = (String) prop.get("url"); // more general way - in case you need a double for example
-            user = prop.getProperty("user");
-            password = prop.getProperty("password");
-        } catch(IOException e) {
-            throw new RuntimeException("Problem with reading connection info: " + e.getMessage());
-        }
-        // build the connection
-        Connection conn = null;
-        try{
-            conn = DriverManager.getConnection(url, user, password);
-        } catch(SQLException e){
-            throw new RuntimeException("Problem with database connection: " + e.getMessage());
-        }
-        return conn;
-    } // end getConnection
-
     public static ObservableList<Agent> getAgents() throws SQLException {
         ObservableList<Agent> agents = FXCollections.observableArrayList();
 
         Agent agent; // for processing data
-        Connection conn = getConnection();
+        Connection conn = DatabaseHelper.getConnection();
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select * from agents");
         while(rs.next()){
@@ -63,7 +36,7 @@ public class AgentDB {
     public static ArrayList<Integer> getAgencyIds() throws SQLException {
         ArrayList<Integer> agencyIds = new ArrayList<>();
         int nextId;
-        Connection conn = getConnection();
+        Connection conn = DatabaseHelper.getConnection();
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select AgencyId from agencies order by AgencyId");
         while(rs.next()){
@@ -76,26 +49,28 @@ public class AgentDB {
 
     public static int insertAgent(Agent agent) throws SQLException {
         int numRows = 0; // number of rows affected
-        Connection conn = getConnection();
+        Connection conn = DatabaseHelper.getConnection();
         String sql = "INSERT INTO agents (AgtFirstName, AgtMiddleInitial, AgtLastName, AgtBusPhone, " +
                 "AgtEmail, AgtPosition, agencyId) " +
                 "VALUES(?,?,?,?,?,?,?)";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1, agent.getAgtFirstName());
-        stmt.setString(2, agent.getAgtMiddleInitial());
-        stmt.setString(3, agent.getAgtLastName());
-        stmt.setString(4, agent.getAgtBusPhone());
-        stmt.setString(5, agent.getAgtEmail());
-        stmt.setString(6, agent.getAgtPosition());
-        stmt.setInt(7, agent.getAgencyId());
-        numRows = stmt.executeUpdate();
+
+        numRows = DatabaseHelper.createPreparedStatementExecute(conn, sql,
+                agent.getAgtFirstName(),
+                agent.getAgtMiddleInitial(),
+                agent.getAgtLastName(),
+                agent.getAgtBusPhone(),
+                agent.getAgtEmail(),
+                agent.getAgtPosition(),
+                agent.getAgencyId());
+
         conn.close();
+
         return numRows;
     }
 
     public static int updateAgent(int agentId, Agent agent) throws SQLException {
         int numRows = 0; // number of rows affected
-        Connection conn = getConnection();
+        Connection conn = DatabaseHelper.getConnection();
         String sql = "UPDATE agents SET " +
                 "AgtFirstName = ?, " +
                 "AgtMiddleInitial = ?, " +
@@ -105,23 +80,24 @@ public class AgentDB {
                 "AgtPosition = ?, " +
                 "AgencyId = ? " +
                 "WHERE AgentId = ?";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1, agent.getAgtFirstName());
-        stmt.setString(2, agent.getAgtMiddleInitial());
-        stmt.setString(3, agent.getAgtLastName());
-        stmt.setString(4, agent.getAgtBusPhone());
-        stmt.setString(5, agent.getAgtEmail());
-        stmt.setString(6, agent.getAgtPosition());
-        stmt.setInt(7, agent.getAgencyId());
-        stmt.setInt(8, agentId);
-        numRows = stmt.executeUpdate();
+        numRows = DatabaseHelper.createPreparedStatementExecute(conn, sql,
+                agent.getAgtFirstName(),
+                agent.getAgtMiddleInitial(),
+                agent.getAgtLastName(),
+                agent.getAgtBusPhone(),
+                agent.getAgtEmail(),
+                agent.getAgtPosition(),
+                agent.getAgencyId(),
+                agentId);
+
         conn.close();
+
         return numRows;
     }
 
     public static int deleteAgent(int agentId) throws SQLException {
         int numRows = 0; // number of rows affected
-        Connection conn = getConnection();
+        Connection conn = DatabaseHelper.getConnection();
         String sql = "DELETE from agents WHERE agentid=?";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setInt(1, agentId);

@@ -24,17 +24,17 @@ import org.example.travelexpertsfx.models.Mode;
 
 public class MainController {
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
+    @FXML
     private ResourceBundle resources;
 
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
+    @FXML
     private URL location;
 
-    @FXML // fx:id="btnAdd"
-    private Button btnAdd; // Value injected by FXMLLoader
+    @FXML
+    private Button btnAdd;
 
-    @FXML // fx:id="btnExit"
-    private Button btnExit; // Value injected by FXMLLoader
+    @FXML
+    private Button btnExit;
 
     @FXML
     private TableColumn<Agent, Integer> colAgencyID;
@@ -60,135 +60,97 @@ public class MainController {
     @FXML
     private TableColumn<Agent, String> colAgtPosition;
 
-    @FXML // fx:id="colFeeAmount"
-    private TableColumn<Fee, Double> colFeeAmount; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<Fee, Double> colFeeAmount;
 
-    @FXML // fx:id="colFeeDescription"
-    private TableColumn<Fee, String> colFeeDescription; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<Fee, String> colFeeDescription;
 
-    @FXML // fx:id="colFeeId"
-    private TableColumn<Fee, String> colFeeId; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<Fee, String> colFeeId;
 
-    @FXML // fx:id="colFeeName"
-    private TableColumn<Fee, String> colFeeName; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<Fee, String> colFeeName;
 
-    @FXML // fx:id="fxTabAgent"
-    private Tab fxTabAgent; // Value injected by FXMLLoader
+    @FXML
+    private Tab fxTabAgent;
 
-    @FXML // fx:id="fxTabFee"
-    private Tab fxTabFee; // Value injected by FXMLLoader
+    @FXML
+    private Tab fxTabFee;
 
-    @FXML // fx:id="tbAgent"
-    private TableView<Agent> tbAgent; // Value injected by FXMLLoader
+    @FXML
+    private TableView<Agent> tbAgent;
 
-    @FXML // fx:id="tbFee"
-    private TableView<Fee> tbFee; // Value injected by FXMLLoader
+    @FXML
+    private TableView<Fee> tbFee;
 
     private ITableContext _currentContext;
     private Mode mode;
 
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+    @FXML
     void initialize() {
-        assert btnAdd != null : "fx:id=\"btnAdd\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert btnExit != null : "fx:id=\"btnExit\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert colAgencyID != null : "fx:id=\"colAgencyID\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert colAgtEmail != null : "fx:id=\"colAgtEmail\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert colAgtFirstName != null : "fx:id=\"colAgtFirstName\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert colAgtId != null : "fx:id=\"colAgtId\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert colAgtInitial != null : "fx:id=\"colAgtInitial\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert colAgtLastName != null : "fx:id=\"colAgtLastName\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert colAgtPhone != null : "fx:id=\"colAgtPhone\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert colAgtPosition != null : "fx:id=\"colAgtPosition\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert colFeeAmount != null : "fx:id=\"colFeeAmount\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert colFeeDescription != null : "fx:id=\"colFeeDescription\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert colFeeId != null : "fx:id=\"colFeeId\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert colFeeName != null : "fx:id=\"colFeeName\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert fxTabAgent != null : "fx:id=\"fxTabAgent\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert fxTabFee != null : "fx:id=\"fxTabFee\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert tbAgent != null : "fx:id=\"tbAgent\" was not injected: check your FXML file 'main-view.fxml'.";
-        assert tbFee != null : "fx:id=\"tbFee\" was not injected: check your FXML file 'main-view.fxml'.";
-// set up table columns - this isn't DRY
-        colFeeId.setCellValueFactory(new PropertyValueFactory<Fee, String>("feeId"));
-        colFeeName.setCellValueFactory(new PropertyValueFactory<Fee, String>("feeName"));
-        colFeeAmount.setCellValueFactory(new PropertyValueFactory<Fee, Double>("feeAmt"));
-        colFeeDescription.setCellValueFactory(new PropertyValueFactory<Fee, String>("feeDesc"));
-
-        colAgtId.setCellValueFactory(new PropertyValueFactory<Agent, Integer>("agentId"));
-        colAgtFirstName.setCellValueFactory(new PropertyValueFactory<Agent, String>("agtFirstName"));
-        colAgtInitial.setCellValueFactory(new PropertyValueFactory<Agent, String>("agtMiddleInitial"));
-        colAgtLastName.setCellValueFactory(new PropertyValueFactory<Agent, String>("agtLastName"));
-        colAgtPhone.setCellValueFactory(new PropertyValueFactory<Agent, String>("agtBusPhone"));
-        colAgtEmail.setCellValueFactory(new PropertyValueFactory<Agent, String>("agtEmail"));
-        colAgtPosition.setCellValueFactory(new PropertyValueFactory<Agent, String>("agtPosition"));
-        colAgencyID.setCellValueFactory(new PropertyValueFactory<Agent, Integer>("agencyId"));
-
+        // Set up the initial context and display content for the Fees tab
         _currentContext = new FeesContext(tbFee);
         _currentContext.displayTableContent();
 
-        // make this part of an abstraction
-        fxTabFee.setOnSelectionChanged(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                _currentContext = new FeesContext(tbFee);
-                _currentContext.displayTableContent();
-            }
-        });
-        fxTabAgent.setOnSelectionChanged(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                _currentContext = new AgentsContext(tbAgent);
-                _currentContext.displayTableContent();
-            }
+        // Set up table columns for both Agents and Fees
+        setTableColumnForFees();
+        setTableColumnForAgents();
+
+        // Add selection listeners for each table
+        addSelectionListener(tbFee);
+        addSelectionListener(tbAgent);
+
+        // Handle tab change events
+        fxTabFee.setOnSelectionChanged(event -> {
+            _currentContext = new FeesContext(tbFee);
+            _currentContext.displayTableContent();
         });
 
-        // refactor inside methods to use wrapper class
-        tbFee.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Fee>() {
-            @Override
-            public void changed(ObservableValue<? extends Fee> observableValue, Fee fee, Fee t1) {
-                int index = tbFee.getSelectionModel().getSelectedIndex();
-                // check when it loses or gains selection
-                if(tbFee.getSelectionModel().isSelected(index)){
-                    // open the dialog in a separate thread - to avoid error when dialog closes
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            mode = Mode.EDIT;
-                            _currentContext.openDialog(t1, mode);
-                        }
-                    }); //whenever possible to run the task, run it
-                }
-            }
-        });
-        tbAgent.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Agent>() {
-            @Override
-            public void changed(ObservableValue<? extends Agent> observableValue, Agent agent, Agent t1) {
-                int index = tbAgent.getSelectionModel().getSelectedIndex();
-                // check when it loses or gains selection
-                if(tbAgent.getSelectionModel().isSelected(index)){
-                    // open the dialog in a separate thread - to avoid error when dialog closes
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            mode = Mode.EDIT;
-                            _currentContext.openDialog(t1, mode);
-                        }
-                    }); //whenever possible to run the task, run it
-                }
-            }
+        fxTabAgent.setOnSelectionChanged(event -> {
+            _currentContext = new AgentsContext(tbAgent);
+            _currentContext.displayTableContent();
         });
 
-        btnAdd.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                mode = Mode.ADD;
-                _currentContext.openDialog(null, mode); // no item at beginning of add.
+        // Handle button click events
+        btnAdd.setOnMouseClicked(event -> {
+            mode = Mode.ADD;
+            _currentContext.openDialog(null, mode);
+        });
+
+        btnExit.setOnMouseClicked(event -> System.exit(0));
+    }
+
+    // Set up table columns for Fees
+    private void setTableColumnForFees() {
+        colFeeId.setCellValueFactory(new PropertyValueFactory<>("feeId"));
+        colFeeName.setCellValueFactory(new PropertyValueFactory<>("feeName"));
+        colFeeAmount.setCellValueFactory(new PropertyValueFactory<>("feeAmt"));
+        colFeeDescription.setCellValueFactory(new PropertyValueFactory<>("feeDesc"));
+    }
+
+    // Set up table columns for Agents
+    private void setTableColumnForAgents() {
+        colAgtId.setCellValueFactory(new PropertyValueFactory<>("agentId"));
+        colAgtFirstName.setCellValueFactory(new PropertyValueFactory<>("agtFirstName"));
+        colAgtInitial.setCellValueFactory(new PropertyValueFactory<>("agtMiddleInitial"));
+        colAgtLastName.setCellValueFactory(new PropertyValueFactory<>("agtLastName"));
+        colAgtPhone.setCellValueFactory(new PropertyValueFactory<>("agtBusPhone"));
+        colAgtEmail.setCellValueFactory(new PropertyValueFactory<>("agtEmail"));
+        colAgtPosition.setCellValueFactory(new PropertyValueFactory<>("agtPosition"));
+        colAgencyID.setCellValueFactory(new PropertyValueFactory<>("agencyId"));
+    }
+
+    // Add selection listener for any TableView (generic for both Agent and Fee tables)
+    private <T> void addSelectionListener(TableView<T> tableView) {
+        tableView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldItem, selectedItem) -> {
+            int index = tableView.getSelectionModel().getSelectedIndex();
+            if (tableView.getSelectionModel().isSelected(index)) {
+                Platform.runLater(() -> {
+                    mode = Mode.EDIT;
+                    _currentContext.openDialog(selectedItem, mode);
+                });
             }
         });
-        btnExit.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                System.exit(0);
-            }
-        });
-    } // end initialize
-} // end class
+    }
+}
