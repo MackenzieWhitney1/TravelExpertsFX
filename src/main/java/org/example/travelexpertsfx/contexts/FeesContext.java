@@ -11,7 +11,7 @@ import org.example.travelexpertsfx.TravelExpertsApplication;
 import org.example.travelexpertsfx.controllers.FeeDialogController;
 import org.example.travelexpertsfx.data.FeeDB;
 import org.example.travelexpertsfx.models.Fee;
-import org.example.travelexpertsfx.models.Mode;
+import org.example.travelexpertsfx.Mode;
 
 import java.io.IOException;
 import java.sql.SQLException;

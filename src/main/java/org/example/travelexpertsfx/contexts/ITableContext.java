@@ -1,6 +1,6 @@
 package org.example.travelexpertsfx.contexts;
 
-import org.example.travelexpertsfx.models.Mode;
+import org.example.travelexpertsfx.Mode;
 
 public interface ITableContext {
     // Read - used to populate the table view

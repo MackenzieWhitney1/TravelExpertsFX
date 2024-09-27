@@ -14,9 +14,9 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.example.travelexpertsfx.data.AgentDB;
 import org.example.travelexpertsfx.models.Agent;
-import org.example.travelexpertsfx.models.Mode;
+import org.example.travelexpertsfx.Mode;
 
-public class AgentDialogController extends BaseDialogController {
+public class AgentDialogController extends BaseDialogController<Agent, Integer> {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -116,25 +116,23 @@ public class AgentDialogController extends BaseDialogController {
         cbAgencyId.setItems(agencyIdList);
     }
 
-    private void buttonDeleteClicked() {
-        int nrRows = 0;
-        mode = Mode.DELETE;
-        int agentId = Integer.parseInt(tfAgentId.getText());
+    private void buttonSaveClicked() {
         try {
-            nrRows = AgentDB.deleteAgent(agentId);
+            SaveEntity(
+                    collectAgent(),
+                    AgentDB::insertAgent,
+                    AgentDB::updateAgent,
+                    Agent::getAgentId,
+                    true, // need own validator function
+                    mode);
+        } catch (SQLException e){
+            displayAlert(Alert.AlertType.ERROR, mode, "Database error: " + e.getMessage());
         }
-        catch(SQLIntegrityConstraintViolationException e){
-            displayAlert(Alert.AlertType.ERROR, mode, "Cannot delete agent who has customers.");
-            return;
-        }
-        catch (SQLException e){
-            throw new RuntimeException();
-        }
-        if(nrRows == 0){
-            displayAlert(Alert.AlertType.ERROR, mode, "");
-        } else { // successful
-            displayAlert(Alert.AlertType.CONFIRMATION, mode, "");
-        }
+    }
+
+    private void buttonDeleteClicked() {
+        int agentId = Integer.parseInt(tfAgentId.getText());
+        DeleteEntity(agentId, AgentDB::deleteAgent);
     }
 
     public void setMode(Mode mode) {
@@ -145,31 +143,9 @@ public class AgentDialogController extends BaseDialogController {
         if(mode.equals(Mode.ADD)) {
             cbAgencyId.getSelectionModel().select(0);
         }
-    }
-
-    private void buttonSaveClicked() {
-        int nrRows = 0;
-        Agent agent = collectAgent();
-
-        try {
-            if (mode.equals(Mode.ADD)) {
-                nrRows = AgentDB.insertAgent(agent);
-            } else // edit
-            {
-                nrRows = AgentDB.updateAgent(agent.getAgentId(), agent);
-            }
-        } catch (SQLIntegrityConstraintViolationException e){
-            displayAlert(Alert.AlertType.ERROR, mode,"This agency doesn't exist.");
-            return;
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        if(nrRows == 0){
-            displayAlert(Alert.AlertType.ERROR, mode, "");
-        } else { // successful
-            displayAlert(Alert.AlertType.CONFIRMATION, mode, "");
+        if(mode.equals(Mode.EDIT)){
+            tfAgentId.setEditable(false);
+            tfAgentId.setDisable(true);
         }
     }
 
