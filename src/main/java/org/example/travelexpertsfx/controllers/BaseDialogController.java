@@ -8,6 +8,7 @@ import org.example.travelexpertsfx.Mode;
 
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.Objects;
 
 public abstract class BaseDialogController<T, IDType> {
 
@@ -16,12 +17,10 @@ public abstract class BaseDialogController<T, IDType> {
             SQLFunction<T, Integer> insertFunc,
             SQLBiFunction<IDType, T, Integer> updateFunc,
             SQLFunction<T, IDType> getIdFunc,
-            boolean validateFunc,
             Mode mode) throws SQLException
     {
         Integer nrRows;
-
-        if(validateFunc) {
+        if(!Objects.isNull(entity)) { // check entity isn't null.
             try {
                 if (mode == Mode.ADD) {
                     nrRows = insertFunc.apply(entity);  // Call the insert function
