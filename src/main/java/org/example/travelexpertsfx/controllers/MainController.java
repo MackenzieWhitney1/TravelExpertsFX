@@ -37,42 +37,6 @@ public class MainController {
     private Button btnExit;
 
     @FXML
-    private TableColumn<Agent, Integer> colAgencyID;
-
-    @FXML
-    private TableColumn<Agent, String> colAgtEmail;
-
-    @FXML
-    private TableColumn<Agent, String> colAgtFirstName;
-
-    @FXML
-    private TableColumn<Agent, Integer> colAgtId;
-
-    @FXML
-    private TableColumn<Agent, String> colAgtInitial;
-
-    @FXML
-    private TableColumn<Agent, String> colAgtLastName;
-
-    @FXML
-    private TableColumn<Agent, String> colAgtPhone;
-
-    @FXML
-    private TableColumn<Agent, String> colAgtPosition;
-
-    @FXML
-    private TableColumn<Fee, Double> colFeeAmount;
-
-    @FXML
-    private TableColumn<Fee, String> colFeeDescription;
-
-    @FXML
-    private TableColumn<Fee, String> colFeeId;
-
-    @FXML
-    private TableColumn<Fee, String> colFeeName;
-
-    @FXML
     private Tab fxTabAgent;
 
     @FXML
@@ -93,10 +57,6 @@ public class MainController {
         _currentContext = new FeesContext(tbFee);
         _currentContext.displayTableContent();
         _currentContext.setupTableColumns();
-
-        /*// Set up table columns for both Agents and Fees
-        setTableColumnForFees();
-        setTableColumnForAgents();*/
 
         // Add selection listeners for each table
         addSelectionListener(tbFee);
@@ -122,26 +82,6 @@ public class MainController {
         });
 
         btnExit.setOnMouseClicked(event -> System.exit(0));
-    }
-
-    // Set up table columns for Fees
-    private void setTableColumnForFees() {
-        colFeeId.setCellValueFactory(new PropertyValueFactory<>("feeId"));
-        colFeeName.setCellValueFactory(new PropertyValueFactory<>("feeName"));
-        colFeeAmount.setCellValueFactory(new PropertyValueFactory<>("feeAmt"));
-        colFeeDescription.setCellValueFactory(new PropertyValueFactory<>("feeDesc"));
-    }
-
-    // Set up table columns for Agents
-    private void setTableColumnForAgents() {
-        colAgtId.setCellValueFactory(new PropertyValueFactory<>("agentId"));
-        colAgtFirstName.setCellValueFactory(new PropertyValueFactory<>("agtFirstName"));
-        colAgtInitial.setCellValueFactory(new PropertyValueFactory<>("agtMiddleInitial"));
-        colAgtLastName.setCellValueFactory(new PropertyValueFactory<>("agtLastName"));
-        colAgtPhone.setCellValueFactory(new PropertyValueFactory<>("agtBusPhone"));
-        colAgtEmail.setCellValueFactory(new PropertyValueFactory<>("agtEmail"));
-        colAgtPosition.setCellValueFactory(new PropertyValueFactory<>("agtPosition"));
-        colAgencyID.setCellValueFactory(new PropertyValueFactory<>("agencyId"));
     }
 
     // Add selection listener for any TableView (generic for both Agent and Fee tables)
