@@ -99,7 +99,6 @@ public class FeeDialogController extends BaseDialogController<Fee, String> {
                     FeeDB::insertFee,
                     FeeDB::updateFee,
                     Fee::getFeeId,
-                    validateFeeInputs(),
                     mode);
         } catch (SQLException e){
             displayAlert(Alert.AlertType.ERROR, mode, "Database error: " + e.getMessage());
@@ -123,7 +122,7 @@ public class FeeDialogController extends BaseDialogController<Fee, String> {
         }
     }
 
-    private boolean validateFeeInputs() throws SQLException {
+    private boolean validateFeeInputs() {
         ArrayList<String> lstFeeId = null;
         try {
             lstFeeId = FeeDB.getExistingFeeIds();
@@ -153,15 +152,14 @@ public class FeeDialogController extends BaseDialogController<Fee, String> {
     }
 
     private Fee collectFeeInfo() {
-        String feeId = "";
-        if(!tfFeeId.getText().isEmpty()){
-            feeId = tfFeeId.getText();
+        if(validateFeeInputs()) {
+            return new Fee(tfFeeId.getText(),
+                    tfFeeName.getText(),
+                    Double.parseDouble(tfFeeAmount.getText()),
+                    tfFeeDescription.getText()
+            );
         }
-        return new Fee(feeId,
-                tfFeeName.getText(),
-                Double.parseDouble(tfFeeAmount.getText()),
-                tfFeeDescription.getText()
-        );
+        return null;
     }
 
     public void displayFee(Fee fee) {

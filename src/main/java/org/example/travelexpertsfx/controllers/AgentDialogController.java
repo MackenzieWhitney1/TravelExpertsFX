@@ -122,7 +122,6 @@ public class AgentDialogController extends BaseDialogController<Agent, Integer> 
                     AgentDB::insertAgent,
                     AgentDB::updateAgent,
                     Agent::getAgentId,
-                    true, // need own validator function
                     mode);
         } catch (SQLException e){
             displayAlert(Alert.AlertType.ERROR, mode, "Database error: " + e.getMessage());
