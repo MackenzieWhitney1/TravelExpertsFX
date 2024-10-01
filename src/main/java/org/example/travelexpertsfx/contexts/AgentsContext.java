@@ -1,20 +1,24 @@
 package org.example.travelexpertsfx.contexts;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.example.travelexpertsfx.DatabaseHelper;
 import org.example.travelexpertsfx.TravelExpertsApplication;
 import org.example.travelexpertsfx.controllers.AgentDialogController;
 import org.example.travelexpertsfx.data.AgentDB;
 import org.example.travelexpertsfx.models.Agent;
 import org.example.travelexpertsfx.Mode;
+import org.example.travelexpertsfx.models.Fee;
 
 import java.io.IOException;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class AgentsContext implements ITableContext {
     private TableView<Agent> agentTable;
@@ -54,5 +58,9 @@ public class AgentsContext implements ITableContext {
         stage.setScene(scene);
         stage.showAndWait(); // waits until user is done with second scene
         displayTableContent();
+    }
+
+    public void setupTableColumns() {
+        DatabaseHelper.setupTableColumns(agentTable, "agents", Agent.class);
     }
 }

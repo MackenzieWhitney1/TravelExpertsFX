@@ -92,10 +92,11 @@ public class MainController {
         // Set up the initial context and display content for the Fees tab
         _currentContext = new FeesContext(tbFee);
         _currentContext.displayTableContent();
+        _currentContext.setupTableColumns();
 
-        // Set up table columns for both Agents and Fees
+        /*// Set up table columns for both Agents and Fees
         setTableColumnForFees();
-        setTableColumnForAgents();
+        setTableColumnForAgents();*/
 
         // Add selection listeners for each table
         addSelectionListener(tbFee);
@@ -105,11 +106,13 @@ public class MainController {
         fxTabFee.setOnSelectionChanged(event -> {
             _currentContext = new FeesContext(tbFee);
             _currentContext.displayTableContent();
+            _currentContext.setupTableColumns();
         });
 
         fxTabAgent.setOnSelectionChanged(event -> {
             _currentContext = new AgentsContext(tbAgent);
             _currentContext.displayTableContent();
+            _currentContext.setupTableColumns();
         });
 
         // Handle button click events

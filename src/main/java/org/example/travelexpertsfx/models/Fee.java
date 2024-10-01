@@ -4,10 +4,10 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Fee {
-    private SimpleStringProperty feeId;
-    private SimpleStringProperty feeName;
-    private SimpleDoubleProperty feeAmt;
-    private SimpleStringProperty feeDesc;
+    private final SimpleStringProperty feeId;
+    private final SimpleStringProperty feeName;
+    private final SimpleDoubleProperty feeAmt;
+    private final SimpleStringProperty feeDesc;
 
     public Fee(String feeId, String feeName, Double feeAmt, String feeDesc) {
         this.feeId = new SimpleStringProperty(feeId);
