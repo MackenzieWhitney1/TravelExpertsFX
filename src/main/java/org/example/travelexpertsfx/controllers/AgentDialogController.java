@@ -2,7 +2,6 @@ package org.example.travelexpertsfx.controllers;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
