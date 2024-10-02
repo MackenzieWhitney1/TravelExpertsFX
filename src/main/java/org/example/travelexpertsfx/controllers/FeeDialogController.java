@@ -4,12 +4,9 @@
 
 package org.example.travelexpertsfx.controllers;
 
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -23,12 +20,6 @@ import org.example.travelexpertsfx.Mode;
 import static org.example.travelexpertsfx.Validator.*;
 
 public class FeeDialogController extends BaseDialogController<Fee, String> {
-
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
-
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
 
     @FXML // fx:id="btnCancel"
     private Button btnCancel; // Value injected by FXMLLoader
@@ -67,27 +58,14 @@ public class FeeDialogController extends BaseDialogController<Fee, String> {
         assert tfFeeId != null : "fx:id=\"tfFeeId\" was not injected: check your FXML file 'dialog-view.fxml'.";
         assert tfFeeName != null : "fx:id=\"tfFeeName\" was not injected: check your FXML file 'dialog-view.fxml'.";
 
-        btnSave.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                buttonSaveClicked(mouseEvent);
-                closeStage(mouseEvent);
-            }
-        });
+        //closeStage(mouseEvent);
+        btnSave.setOnMouseClicked(this::buttonSaveClicked);
 
-        btnCancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                closeStage(mouseEvent);
-            }
-        });
+        btnCancel.setOnMouseClicked(_ -> closeStage(btnCancel));
 
-        btnDelete.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                buttonDeleteClicked();
-                closeStage(mouseEvent);
-            }
+        btnDelete.setOnMouseClicked(_ -> {
+            buttonDeleteClicked();
+            closeStage(btnDelete);
         });
 
     }
@@ -99,7 +77,8 @@ public class FeeDialogController extends BaseDialogController<Fee, String> {
                     FeeDB::insertFee,
                     FeeDB::updateFee,
                     Fee::getFeeId,
-                    mode);
+                    mode,
+                    btnSave);
         } catch (SQLException e){
             displayAlert(Alert.AlertType.ERROR, mode, "Database error: " + e.getMessage());
         }

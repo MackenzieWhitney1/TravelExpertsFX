@@ -2,7 +2,6 @@ package org.example.travelexpertsfx.controllers;
 
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.example.travelexpertsfx.Mode;
 
@@ -17,7 +16,8 @@ public abstract class BaseDialogController<T, IDType> {
             SQLFunction<T, Integer> insertFunc,
             SQLBiFunction<IDType, T, Integer> updateFunc,
             SQLFunction<T, IDType> getIdFunc,
-            Mode mode) throws SQLException
+            Mode mode,
+            Node sourceNode) throws SQLException
     {
         Integer nrRows;
         if(!Objects.isNull(entity)) { // check entity isn't null.
@@ -37,6 +37,7 @@ public abstract class BaseDialogController<T, IDType> {
                 displayAlert(Alert.AlertType.ERROR, mode, "Error occurred while saving.");
             } else {
                 displayAlert(Alert.AlertType.CONFIRMATION, mode, "Save successful.");
+                closeStage(sourceNode);  // Close the dialog upon successful save
             }
         }
     }
@@ -64,11 +65,12 @@ public abstract class BaseDialogController<T, IDType> {
             displayAlert(Alert.AlertType.CONFIRMATION, mode, "");
         }
     }
-    protected void closeStage(MouseEvent mouseEvent) {
-        Node node = (Node) mouseEvent.getSource();
+
+    protected void closeStage(Node node) {
         Stage stage = (Stage) node.getScene().getWindow();
         stage.close();
     }
+
     protected void displayAlert(Alert.AlertType t, Mode mode, String msg){
         String content = "";
         Alert alert = new Alert(t);

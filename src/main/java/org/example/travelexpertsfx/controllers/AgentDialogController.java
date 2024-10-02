@@ -1,27 +1,17 @@
 package org.example.travelexpertsfx.controllers;
 
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import org.example.travelexpertsfx.data.AgentDB;
 import org.example.travelexpertsfx.models.Agent;
 import org.example.travelexpertsfx.Mode;
 
 public class AgentDialogController extends BaseDialogController<Agent, Integer> {
-
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
-
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
 
     @FXML // fx:id="btnCancel"
     private Button btnCancel; // Value injected by FXMLLoader
@@ -78,33 +68,19 @@ public class AgentDialogController extends BaseDialogController<Agent, Integer> 
         assert cbAgencyId != null : "fx:id=\"cbAgencyId\" was not injected: check your FXML file 'dialog-view.fxml'.";
 
         loadComboBox();
-        btnSave.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                buttonSaveClicked();
-                closeStage(mouseEvent);
-            }
-        });
+        btnSave.setOnMouseClicked(_ -> buttonSaveClicked());
 
-        btnCancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                closeStage(mouseEvent);
-            }
-        });
+        btnCancel.setOnMouseClicked(_ -> closeStage(btnCancel));
 
-        btnDelete.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                buttonDeleteClicked();
-                closeStage(mouseEvent);
-            }
+        btnDelete.setOnMouseClicked(_ -> {
+            buttonDeleteClicked();
+            closeStage(btnDelete);
         });
 
     } // ends initialize
 
     private void loadComboBox() {
-        ArrayList<Integer> agencyIds = new ArrayList<>();
+        ArrayList<Integer> agencyIds;
         try {
             agencyIds = AgentDB.getAgencyIds();
         } catch (SQLException e) {
@@ -122,7 +98,8 @@ public class AgentDialogController extends BaseDialogController<Agent, Integer> 
                     AgentDB::insertAgent,
                     AgentDB::updateAgent,
                     Agent::getAgentId,
-                    mode);
+                    mode,
+                    btnSave);
         } catch (SQLException e){
             displayAlert(Alert.AlertType.ERROR, mode, "Database error: " + e.getMessage());
         }
