@@ -4,6 +4,8 @@ module org.example.travelexpertsfx {
 
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
+    requires kernel;
+    requires layout;
 
     opens org.example.travelexpertsfx.models to javafx.base;
     exports org.example.travelexpertsfx;

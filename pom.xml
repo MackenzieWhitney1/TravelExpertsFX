@@ -15,6 +15,19 @@
     </properties>
 
     <dependencies>
+        <!-- iText 7 Kernel (core functionality) -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>kernel</artifactId>
+            <version>8.0.2</version>
+        </dependency>
+        <!-- iText 7 Layout (for advanced content like tables, paragraphs, etc.) -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>layout</artifactId>
+            <version>8.0.2</version>
+        </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>

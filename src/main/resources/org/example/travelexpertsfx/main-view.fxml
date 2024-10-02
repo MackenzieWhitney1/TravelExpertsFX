@@ -51,7 +51,13 @@
                   <Font size="18.0" />
                </font>
             </Button>
-          <Button fx:id="btnExit" layoutX="659.0" layoutY="22.0" mnemonicParsing="false" text="Exit">
+            <Button fx:id="btnGeneratePDF" layoutX="300.0" layoutY="22.0" text="Generate PDF" onMouseClicked="#buttonGeneratePDFClicked">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+
+            <Button fx:id="btnExit" layoutX="659.0" layoutY="22.0" mnemonicParsing="false" text="Exit">
                <font>
                   <Font size="18.0" />
                </font>

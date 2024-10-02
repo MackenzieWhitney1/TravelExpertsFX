@@ -13,13 +13,12 @@ import org.example.travelexpertsfx.controllers.AgentDialogController;
 import org.example.travelexpertsfx.data.AgentDB;
 import org.example.travelexpertsfx.models.Agent;
 import org.example.travelexpertsfx.Mode;
-import org.example.travelexpertsfx.models.Fee;
 
 import java.io.IOException;
 import java.sql.*;
 
 public class AgentsContext implements ITableContext {
-    private TableView<Agent> agentTable;
+    private final TableView<Agent> agentTable;
     private ObservableList<Agent> data = FXCollections.observableArrayList();
 
     public AgentsContext(TableView<Agent> agentTable) {
@@ -40,7 +39,7 @@ public class AgentsContext implements ITableContext {
     @Override
     public void openDialog(Object obj, Mode mode) {
         FXMLLoader fxmlLoader = new FXMLLoader(TravelExpertsApplication.class.getResource("agent-dialog-view.fxml"));
-        Scene scene = null;
+        Scene scene;
         try {
             scene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
@@ -61,4 +60,6 @@ public class AgentsContext implements ITableContext {
     public void setupTableColumns() {
         DatabaseHelper.setupTableColumns(agentTable, "agents", Agent.class);
     }
+
+    public void generatePDF() {}
 }
