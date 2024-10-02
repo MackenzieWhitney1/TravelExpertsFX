@@ -9,10 +9,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.example.travelexpertsfx.contexts.AgentsContext;
@@ -51,8 +48,12 @@ public class MainController {
     private ITableContext _currentContext;
     private Mode mode;
 
+    @FXML // fx:id="btnGeneratePDF"
+    private Button btnGeneratePDF; // Value injected by FXMLLoader
+
     @FXML
     void initialize() {
+
         // Set up the initial context and display content for the Fees tab
         _currentContext = new FeesContext(tbFee);
         _currentContext.displayTableContent();
@@ -82,6 +83,20 @@ public class MainController {
         });
 
         btnExit.setOnMouseClicked(event -> System.exit(0));
+
+        btnGeneratePDF.setOnMouseClicked(this::buttonGeneratePDFClicked);
+    }
+
+    @FXML
+    private void buttonGeneratePDFClicked(MouseEvent mouseEvent) {
+        // Call generatePDF method from FeesContext
+        if (_currentContext != null) {
+            try {
+                _currentContext.generatePDF(); // Specify the correct file path
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     // Add selection listener for any TableView (generic for both Agent and Fee tables)

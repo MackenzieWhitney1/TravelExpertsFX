@@ -7,5 +7,5 @@ public interface ITableContext {
     public void displayTableContent();
     public void openDialog(Object obj, Mode mode);
     public void setupTableColumns();
-
+    public void generatePDF();
 }
