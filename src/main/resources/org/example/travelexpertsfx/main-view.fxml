@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -16,30 +15,19 @@
         <tabs>
           <Tab fx:id="fxTabFee" text="Fee">
                <content>
-                  <TableView fx:id="tbFee" prefHeight="200.0" prefWidth="200.0">
-                     <columns>
-                        <TableColumn fx:id="colFeeId" prefWidth="75.0" text="Fee Id" />
-                        <TableColumn fx:id="colFeeName" prefWidth="111.9999771118164" text="Fee Name" />
-                        <TableColumn fx:id="colFeeAmount" prefWidth="79.20001220703125" text="Fee Amount" />
-                        <TableColumn fx:id="colFeeDescription" prefWidth="243.99996948242188" text="Fee Description" />
-                     </columns></TableView>
+                  <TableView fx:id="tbFee" prefHeight="200.0" prefWidth="200.0" />
                </content>
           </Tab>
           <Tab fx:id="fxTabAgent" text="Agent">
                <content>
-                  <TableView fx:id="tbAgent" prefHeight="200.0" prefWidth="200.0">
-                     <columns>
-                        <TableColumn fx:id="colAgtId" prefWidth="39.19998013973236" text="id" />
-                        <TableColumn fx:id="colAgtFirstName" prefWidth="107.19998931884766" text="First Name" />
-                        <TableColumn fx:id="colAgtInitial" prefWidth="48.79998779296875" text="Initial" />
-                        <TableColumn fx:id="colAgtLastName" prefWidth="123.20001220703125" text="Last Name" />
-                        <TableColumn fx:id="colAgtPhone" prefWidth="101.60003662109375" text="Phone" />
-                        <TableColumn fx:id="colAgtEmail" prefWidth="135.19998168945312" text="Email" />
-                        <TableColumn fx:id="colAgtPosition" prefWidth="190.0" text="Position" />
-                        <TableColumn fx:id="colAgencyID" minWidth="0.0" prefWidth="63.2000732421875" text="AgencyID" />
-                     </columns></TableView>
+                  <TableView fx:id="tbAgent" prefHeight="200.0" prefWidth="200.0" />
                </content>
           </Tab>
+            <Tab fx:id="fxTabAgency" text="Agency">
+               <content>
+                  <TableView fx:id="tbAgency" prefHeight="200.0" prefWidth="200.0" />
+               </content>
+            </Tab>
         </tabs>
       </TabPane>
    </center>
@@ -51,7 +39,7 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button fx:id="btnGeneratePDF" layoutX="300.0" layoutY="22.0" text="Generate PDF" onMouseClicked="#buttonGeneratePDFClicked">
+            <Button fx:id="btnGeneratePDF" layoutX="300.0" layoutY="22.0" onMouseClicked="#buttonGeneratePDFClicked" text="Generate PDF">
                <font>
                   <Font size="18.0" />
                </font>

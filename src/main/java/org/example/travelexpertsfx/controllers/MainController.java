@@ -4,17 +4,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import org.example.travelexpertsfx.contexts.AgenciesContext;
 import org.example.travelexpertsfx.contexts.AgentsContext;
 import org.example.travelexpertsfx.contexts.FeesContext;
 import org.example.travelexpertsfx.contexts.ITableContext;
+import org.example.travelexpertsfx.models.Agency;
 import org.example.travelexpertsfx.models.Agent;
 import org.example.travelexpertsfx.models.Fee;
 import org.example.travelexpertsfx.Mode;
@@ -40,10 +37,16 @@ public class MainController {
     private Tab fxTabFee;
 
     @FXML
+    private Tab fxTabAgency;
+
+    @FXML
     private TableView<Agent> tbAgent;
 
     @FXML
     private TableView<Fee> tbFee;
+
+    @FXML
+    private TableView<Agency> tbAgency;
 
     private ITableContext _currentContext;
     private Mode mode;
@@ -62,6 +65,7 @@ public class MainController {
         // Add selection listeners for each table
         addSelectionListener(tbFee);
         addSelectionListener(tbAgent);
+        addSelectionListener(tbAgency);
 
         // Handle tab change events
         fxTabFee.setOnSelectionChanged(event -> {
@@ -72,6 +76,12 @@ public class MainController {
 
         fxTabAgent.setOnSelectionChanged(event -> {
             _currentContext = new AgentsContext(tbAgent);
+            _currentContext.displayTableContent();
+            _currentContext.setupTableColumns();
+        });
+
+        fxTabAgency.setOnSelectionChanged(event -> {
+            _currentContext = new AgenciesContext(tbAgency);
             _currentContext.displayTableContent();
             _currentContext.setupTableColumns();
         });
