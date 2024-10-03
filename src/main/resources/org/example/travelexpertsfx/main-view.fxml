@@ -28,6 +28,11 @@
                   <TableView fx:id="tbAgency" prefHeight="200.0" prefWidth="200.0" />
                </content>
             </Tab>
+            <Tab fx:id="fxTabPackage" text="Package">
+               <content>
+                  <TableView fx:id="tbPackage" prefHeight="200.0" prefWidth="200.0" />
+               </content>
+            </Tab>
         </tabs>
       </TabPane>
    </center>
