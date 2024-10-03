@@ -29,7 +29,7 @@ public abstract class BaseDialogController<T, IDType> {
                     nrRows = updateFunc.apply(entityId, entity);  // Call the update function
                 }
             } catch (SQLException e) {
-                displayAlert(Alert.AlertType.ERROR, mode, "Database error: " + e.getMessage());
+                displayAlert(Alert.AlertType.ERROR, mode, "Database error: \n" + e.getMessage());
                 return;
             }
 
