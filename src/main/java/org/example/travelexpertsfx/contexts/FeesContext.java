@@ -109,4 +109,8 @@ public class FeesContext implements ITableContext {
             e.printStackTrace();
         }
     }
+
+    public Object getSelected() {
+        return feeTable.getSelectionModel().getSelectedItem();
+    }
 }

@@ -62,4 +62,8 @@ public class AgentsContext implements ITableContext {
     }
 
     public void generatePDF() {}
+
+    public Object getSelected() {
+        return agentTable.getSelectionModel().getSelectedItem();
+    }
 }

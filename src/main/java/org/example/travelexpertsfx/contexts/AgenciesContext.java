@@ -65,4 +65,8 @@ public class AgenciesContext implements ITableContext {
     }
 
     public void generatePDF() {}
+
+    public Object getSelected() {
+        return agencyTable.getSelectionModel().getSelectedItem();
+    }
 }

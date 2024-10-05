@@ -69,4 +69,8 @@ public class PackagesContext implements ITableContext {
     public void generatePDF() {
 
     }
+
+    public Object getSelected() {
+        return packageTable.getSelectionModel().getSelectedItem();
+    }
 }

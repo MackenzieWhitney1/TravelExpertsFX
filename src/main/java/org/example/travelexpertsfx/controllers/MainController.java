@@ -26,6 +26,12 @@ public class MainController {
     private Button btnAdd;
 
     @FXML
+    private Button btnEdit;
+
+    @FXML
+    private Button btnInfo;
+
+    @FXML
     private Button btnExit;
 
     @FXML
@@ -68,10 +74,10 @@ public class MainController {
         _currentContext.setupTableColumns();
 
         // Add selection listeners for each table
-        addSelectionListener(tbFee);
-        addSelectionListener(tbAgent);
-        addSelectionListener(tbAgency);
-        addSelectionListener(tbPackage);
+//        addSelectionListener(tbFee);
+//        addSelectionListener(tbAgent);
+//        addSelectionListener(tbAgency);
+//        addSelectionListener(tbPackage);
 
         // Handle tab change events
         fxTabFee.setOnSelectionChanged(event -> {
@@ -104,6 +110,15 @@ public class MainController {
             _currentContext.openDialog(null, mode);
         });
 
+        btnEdit.setOnMouseClicked(event -> {
+            Platform.runLater(() -> {
+                mode = Mode.EDIT;
+                Object selected;
+                selected = _currentContext.getSelected();
+                _currentContext.openDialog(selected, mode);
+            });
+        });
+
         btnExit.setOnMouseClicked(event -> System.exit(0));
 
         btnGeneratePDF.setOnMouseClicked(this::buttonGeneratePDFClicked);
@@ -122,15 +137,15 @@ public class MainController {
     }
 
     // Add selection listener for any TableView (generic for both Agent and Fee tables)
-    private <T> void addSelectionListener(TableView<T> tableView) {
-        tableView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldItem, selectedItem) -> {
-            int index = tableView.getSelectionModel().getSelectedIndex();
-            if (tableView.getSelectionModel().isSelected(index)) {
-                Platform.runLater(() -> {
-                    mode = Mode.EDIT;
-                    _currentContext.openDialog(selectedItem, mode);
-                });
-            }
-        });
-    }
+//    private <T> void addSelectionListener(TableView<T> tableView) {
+//        tableView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldItem, selectedItem) -> {
+//            int index = tableView.getSelectionModel().getSelectedIndex();
+//            if (tableView.getSelectionModel().isSelected(index)) {
+//                Platform.runLater(() -> {
+//                    mode = Mode.EDIT;
+//                    _currentContext.openDialog(selectedItem, mode);
+//                });
+//            }
+//        });
+//    }
 }

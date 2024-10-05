@@ -44,13 +44,23 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button fx:id="btnGeneratePDF" layoutX="300.0" layoutY="22.0" onMouseClicked="#buttonGeneratePDFClicked" text="Generate PDF">
+            <Button fx:id="btnGeneratePDF" layoutX="460.0" layoutY="22.0" onMouseClicked="#buttonGeneratePDFClicked" text="Generate PDF">
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
 
             <Button fx:id="btnExit" layoutX="659.0" layoutY="22.0" mnemonicParsing="false" text="Exit">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnEdit" layoutX="170.0" layoutY="22.0" mnemonicParsing="false" text="Edit">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnInfo" layoutX="245.0" layoutY="22.0" mnemonicParsing="false" text="View More Info">
                <font>
                   <Font size="18.0" />
                </font>

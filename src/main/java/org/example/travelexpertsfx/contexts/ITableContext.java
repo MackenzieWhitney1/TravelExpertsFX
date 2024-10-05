@@ -8,4 +8,5 @@ public interface ITableContext {
     public void openDialog(Object obj, Mode mode);
     public void setupTableColumns();
     public void generatePDF();
+    public Object getSelected();
 }
