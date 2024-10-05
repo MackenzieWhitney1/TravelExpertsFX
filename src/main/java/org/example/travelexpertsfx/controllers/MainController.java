@@ -29,6 +29,9 @@ public class MainController {
     private Button btnExit;
 
     @FXML
+    private Button btnEdit;
+
+    @FXML
     private Tab fxTabAgent;
 
     @FXML
@@ -68,7 +71,9 @@ public class MainController {
         _currentContext.setupTableColumns();
 
         // Add selection listeners for each table
-        addSelectionListener(tbFee);
+        addSelectionListenerAndBindButton(tbFee, btnEdit);
+        // Set up the Edit button action
+        setupEditButton(btnEdit, tbFee);
         addSelectionListener(tbAgent);
         addSelectionListener(tbAgency);
         addSelectionListener(tbPackage);
@@ -130,6 +135,27 @@ public class MainController {
                     mode = Mode.EDIT;
                     _currentContext.openDialog(selectedItem, mode);
                 });
+            }
+        });
+    }
+
+    private <T> void addSelectionListenerAndBindButton(TableView<T> tableView, Button editButton) {
+        // Bind the button's disable property to the table selection
+        editButton.visibleProperty().bind(
+                tableView.getSelectionModel().selectedItemProperty().isNull().not()
+        );
+    }
+
+    private <T> void setupEditButton(Button editButton, TableView<T> tableView) {
+        editButton.setOnAction(event -> {
+            T selectedItem = tableView.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                Platform.runLater(() -> {
+                    mode = Mode.EDIT;
+                    _currentContext.openDialog(selectedItem, mode);
+                });
+            } else {
+                System.out.println("No item selected for editing");
             }
         });
     }
