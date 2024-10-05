@@ -5,9 +5,13 @@ import javafx.scene.control.*;
 import org.example.travelexpertsfx.Mode;
 import org.example.travelexpertsfx.data.AgencyDB;
 import org.example.travelexpertsfx.data.AgentDB;
+import org.example.travelexpertsfx.data.FeeDB;
 import org.example.travelexpertsfx.models.Agency;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+
+import static org.example.travelexpertsfx.Validator.*;
 
 public class AgencyDialogController extends BaseDialogController<Agency, Integer> {
 
@@ -104,19 +108,22 @@ public class AgencyDialogController extends BaseDialogController<Agency, Integer
 
     private Agency collectAgency() {
         int agencyId = 0;
-        if(!tfAgencyId.getText().isEmpty()){
+        if (!tfAgencyId.getText().isEmpty()) {
             agencyId = Integer.parseInt(tfAgencyId.getText());
         }
-        return new Agency(
-                agencyId,
-                tfAgncyAddress.getText(),
-                tfAgncyCity.getText(),
-                tfAgncyProv.getText(),
-                tfAgncyPostal.getText(),
-                tfAgncyCountry.getText(),
-                tfAgncyPhone.getText(),
-                tfAgncyFax.getText()
-        );
+        if (validateAgencyInputs()) {
+            return new Agency(
+                    agencyId,
+                    tfAgncyAddress.getText(),
+                    tfAgncyCity.getText(),
+                    tfAgncyProv.getText(),
+                    tfAgncyPostal.getText(),
+                    tfAgncyCountry.getText(),
+                    tfAgncyPhone.getText(),
+                    tfAgncyFax.getText()
+            );
+        }
+        return null;
     }
 
     public void displayAgency(Agency agency) {
@@ -131,4 +138,35 @@ public class AgencyDialogController extends BaseDialogController<Agency, Integer
 
     } // public because it's called from dialog controller
 
+    private boolean validateAgencyInputs() {
+        StringBuilder errorMsg = new StringBuilder();
+
+        if (!validateNonEmptyEntry(tfAgncyAddress)) {
+            errorMsg.append("Address cannot be empty.\n");
+        }
+        if (!validateNonEmptyEntry(tfAgncyCity)){
+            errorMsg.append("City cannot be empty.\n");
+        }
+        if(!validateNonEmptyEntry(tfAgncyProv)){
+            errorMsg.append("Province cannot be empty.\n");
+        }
+        if(!validateNonEmptyEntry(tfAgncyPostal)){
+            errorMsg.append("Postal Code cannot be empty.\n");
+        }
+        if(!validateNonEmptyEntry(tfAgncyCountry)){
+            errorMsg.append("Country cannot be empty.\n");
+        }
+        if(!validateNonEmptyEntry(tfAgncyPhone)){
+            errorMsg.append("Phone number cannot be empty.\n");
+        }
+        if(!validateNonEmptyEntry(tfAgncyFax)){
+            errorMsg.append("Fax cannot be empty.\n");
+        }
+        if (!errorMsg.isEmpty()) {
+            displayAlert(Alert.AlertType.ERROR, mode, String.valueOf(errorMsg));
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

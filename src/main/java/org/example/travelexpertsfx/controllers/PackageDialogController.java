@@ -11,6 +11,8 @@ import org.example.travelexpertsfx.Mode;
 import org.example.travelexpertsfx.data.PackageDB;
 import org.example.travelexpertsfx.models.MyPackage;
 
+import static org.example.travelexpertsfx.Validator.*;
+
 
 public class PackageDialogController extends BaseDialogController<MyPackage, Integer> {
     @FXML
@@ -109,16 +111,18 @@ public class PackageDialogController extends BaseDialogController<MyPackage, Int
         if(!tfPackageId.getText().isEmpty()){
             packageId = Integer.parseInt(tfPackageId.getText());
         }
-
-        return new MyPackage(
-                packageId,
-                tfPkgName.getText(),
-                Date.from(dpPkgStartDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                Date.from(dpPkgEndDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                tfPkgDesc.getText(),
-                Double.parseDouble(tfPkgBasePrice.getText()),
-                Double.parseDouble(tfPkgAgencyCommission.getText())
-        );
+        if(validatePackageInputs()) {
+            return new MyPackage(
+                    packageId,
+                    tfPkgName.getText(),
+                    Date.from(dpPkgStartDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                    Date.from(dpPkgEndDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                    tfPkgDesc.getText(),
+                    Double.parseDouble(tfPkgBasePrice.getText()),
+                    Double.parseDouble(tfPkgAgencyCommission.getText())
+            );
+        }
+        return null;
     }
 
     public void displayPackage(MyPackage myPackage) {
@@ -136,5 +140,45 @@ public class PackageDialogController extends BaseDialogController<MyPackage, Int
         tfPkgDesc.setText(myPackage.getPkgDesc());
         tfPkgBasePrice.setText(myPackage.getPkgBasePrice()+"");
         tfPkgAgencyCommission.setText(myPackage.getPkgAgencyCommission()+"");
+    }
+
+    private boolean validatePackageInputs() {
+        StringBuilder errorMsg = new StringBuilder();
+
+        if(!validateNonEmptyEntry(tfPkgName)){
+            errorMsg.append("Name cannot be empty.\n");
+        }
+
+        if(!validateDateSelected(dpPkgStartDate)){
+            errorMsg.append("Start Date must be selected.\n");
+        }
+        if(!validateDateSelected(dpPkgEndDate)){
+            errorMsg.append("End Date must be selected.\n");
+        }
+        if(validateDateSelected(dpPkgStartDate) &&
+                validateDateSelected(dpPkgEndDate) &&
+                !validateDateBeforeOtherDate(dpPkgStartDate, dpPkgStartDate)
+        ){
+            errorMsg.append("Start Date must be before End Date.\n");
+        }
+
+        if(!validateNonEmptyEntry(tfPkgDesc)){
+            errorMsg.append("Email cannot be empty.\n");
+        }
+
+        if(!validateNonEmptyPositiveDouble(tfPkgBasePrice)){
+            errorMsg.append("Base price must be a positive double.\n");
+        }
+
+        if(!validateNonEmptyPositiveDouble(tfPkgAgencyCommission)){
+            errorMsg.append("Agency commission must be a positive double.\n");
+        }
+
+        if (!errorMsg.isEmpty()) {
+            displayAlert(Alert.AlertType.ERROR, mode, String.valueOf(errorMsg));
+            return false;
+        } else {
+            return true;
+        }
     }
 }
