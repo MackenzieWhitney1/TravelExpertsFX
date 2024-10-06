@@ -8,11 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.example.travelexpertsfx.contexts.*;
-import org.example.travelexpertsfx.models.Agency;
-import org.example.travelexpertsfx.models.Agent;
-import org.example.travelexpertsfx.models.Fee;
+import org.example.travelexpertsfx.models.*;
 import org.example.travelexpertsfx.Mode;
-import org.example.travelexpertsfx.models.MyPackage;
 
 public class MainController {
 
@@ -44,6 +41,9 @@ public class MainController {
     private Tab fxTabPackage;
 
     @FXML
+    private Tab fxTabBooking;
+
+    @FXML
     private TableView<Agent> tbAgent;
 
     @FXML
@@ -54,6 +54,9 @@ public class MainController {
 
     @FXML
     private TableView<MyPackage> tbPackage;
+
+    @FXML
+    private TableView<Booking> tbBooking;
 
 
     private ITableContext _currentContext;
@@ -77,6 +80,7 @@ public class MainController {
         addSelectionListener(tbAgent);
         addSelectionListener(tbAgency);
         addSelectionListener(tbPackage);
+        addSelectionListener(tbBooking);
 
         // Handle tab change events
         fxTabFee.setOnSelectionChanged(event -> {
@@ -99,6 +103,12 @@ public class MainController {
 
         fxTabPackage.setOnSelectionChanged(event -> {
             _currentContext = new PackagesContext(tbPackage);
+            _currentContext.displayTableContent();
+            _currentContext.setupTableColumns();
+        });
+
+        fxTabBooking.setOnSelectionChanged(event -> {
+            _currentContext = new BookingsContext(tbBooking);
             _currentContext.displayTableContent();
             _currentContext.setupTableColumns();
         });

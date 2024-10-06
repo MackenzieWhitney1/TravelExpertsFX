@@ -33,6 +33,11 @@
                   <TableView fx:id="tbPackage" prefHeight="200.0" prefWidth="200.0" />
                </content>
             </Tab>
+            <Tab fx:id="fxTabBooking" text="Booking">
+               <content>
+                  <TableView fx:id="tbBooking" prefHeight="200.0" prefWidth="200.0" />
+               </content>
+            </Tab>
         </tabs>
       </TabPane>
    </center>
