@@ -76,12 +76,6 @@ public class MainController {
         _currentContext.displayTableContent();
         _currentContext.setupTableColumns();
 
-        // Add selection listeners for each table
-//        addSelectionListener(tbFee);
-//        addSelectionListener(tbAgent);
-//        addSelectionListener(tbAgency);
-//        addSelectionListener(tbPackage);
-
         // Handle tab change events
         fxTabFee.setOnSelectionChanged(event -> {
             _currentContext = new FeesContext(tbFee);
@@ -151,17 +145,4 @@ public class MainController {
             }
         }
     }
-
-    // Add selection listener for any TableView (generic for both Agent and Fee tables)
-//    private <T> void addSelectionListener(TableView<T> tableView) {
-//        tableView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldItem, selectedItem) -> {
-//            int index = tableView.getSelectionModel().getSelectedIndex();
-//            if (tableView.getSelectionModel().isSelected(index)) {
-//                Platform.runLater(() -> {
-//                    mode = Mode.EDIT;
-//                    _currentContext.openDialog(selectedItem, mode);
-//                });
-//            }
-//        });
-//    }
 }
