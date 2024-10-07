@@ -16,6 +16,7 @@ import org.example.travelexpertsfx.DatabaseHelper;
 import org.example.travelexpertsfx.TravelExpertsApplication;
 import org.example.travelexpertsfx.controllers.FeeDialogController;
 import org.example.travelexpertsfx.data.FeeDB;
+import org.example.travelexpertsfx.models.Agency;
 import org.example.travelexpertsfx.models.Fee;
 import org.example.travelexpertsfx.Mode;
 
@@ -112,5 +113,11 @@ public class FeesContext implements ITableContext {
 
     public Object getSelected() {
         return feeTable.getSelectionModel().getSelectedItem();
+    }
+    public int getSelectedInfoId() {
+        return -1; //Has no info field
+    }
+    public void selectInfo(int selected) {
+        feeTable.getSelectionModel().select(selected);
     }
 }

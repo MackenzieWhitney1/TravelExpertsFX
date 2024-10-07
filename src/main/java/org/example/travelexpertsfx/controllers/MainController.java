@@ -35,6 +35,9 @@ public class MainController {
     private Button btnExit;
 
     @FXML
+    private TabPane fxTabs;
+
+    @FXML
     private Tab fxTabAgent;
 
     @FXML
@@ -117,6 +120,19 @@ public class MainController {
                 selected = _currentContext.getSelected();
                 _currentContext.openDialog(selected, mode);
             });
+        });
+
+        btnInfo.setOnMouseClicked(event -> {
+           int selected = _currentContext.getSelectedInfoId();
+           if (selected == -1) return; //Early return if the current table has no info fields
+           String currentTab = fxTabs.getSelectionModel().getSelectedItem().getId();
+           switch (currentTab) {
+               case "fxTabAgent": fxTabs.getSelectionModel().select(fxTabAgency); break; //select the tab of the table that contains additional info
+               case "fxTabAgency": break;
+               case "fxTabFee": break;
+               case "fxTabPackage": break;
+           }
+           _currentContext.selectInfo(selected); //select the item with the id that corresponds to our info field, defined in the target context
         });
 
         btnExit.setOnMouseClicked(event -> System.exit(0));

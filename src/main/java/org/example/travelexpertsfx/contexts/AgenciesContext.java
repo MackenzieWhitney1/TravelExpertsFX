@@ -69,4 +69,10 @@ public class AgenciesContext implements ITableContext {
     public Object getSelected() {
         return agencyTable.getSelectionModel().getSelectedItem();
     }
+    public int getSelectedInfoId() {
+        return -1; //Has no info field
+    }
+    public void selectInfo(int selected) {
+        agencyTable.getSelectionModel().select(selected -1); //selects the item index which is 0-based. TODO: select column with matching PK instead
+    }
 }
