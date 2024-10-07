@@ -13,6 +13,7 @@ import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.example.travelexpertsfx.DatabaseHelper;
+import org.example.travelexpertsfx.PDFGenerator;
 import org.example.travelexpertsfx.TravelExpertsApplication;
 import org.example.travelexpertsfx.controllers.FeeDialogController;
 import org.example.travelexpertsfx.data.FeeDB;
@@ -75,7 +76,8 @@ public class FeesContext implements ITableContext {
     // PDF Generation method
     public void generatePDF() {
         try {
-            // Create a PDF writer
+            PDFGenerator.generateInvoice(pdfPath);
+            /*// Create a PDF writer
             PdfWriter writer = new PdfWriter(new File(pdfPath));
             PdfDocument pdfDoc = new PdfDocument(writer);
             Document document = new Document(pdfDoc);
@@ -105,7 +107,7 @@ public class FeesContext implements ITableContext {
             document.add(table);
             document.close();
 
-            System.out.println("PDF created successfully at: " + pdfPath);
+            System.out.println("PDF created successfully at: " + pdfPath);*/
         } catch (IOException e) {
             e.printStackTrace();
         }
