@@ -1,5 +1,7 @@
 package org.example.travelexpertsfx.controllers;
 
+import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -7,6 +9,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import org.example.travelexpertsfx.PDFGenerator;
 import org.example.travelexpertsfx.contexts.*;
 import org.example.travelexpertsfx.models.Agency;
 import org.example.travelexpertsfx.models.Agent;
@@ -81,24 +84,28 @@ public class MainController {
             _currentContext = new FeesContext(tbFee);
             _currentContext.displayTableContent();
             _currentContext.setupTableColumns();
+            btnGeneratePDF.setVisible(true);
         });
 
         fxTabAgent.setOnSelectionChanged(event -> {
             _currentContext = new AgentsContext(tbAgent);
             _currentContext.displayTableContent();
             _currentContext.setupTableColumns();
+            btnGeneratePDF.setVisible(false);
         });
 
         fxTabAgency.setOnSelectionChanged(event -> {
             _currentContext = new AgenciesContext(tbAgency);
             _currentContext.displayTableContent();
             _currentContext.setupTableColumns();
+            btnGeneratePDF.setVisible(false);
         });
 
         fxTabPackage.setOnSelectionChanged(event -> {
             _currentContext = new PackagesContext(tbPackage);
             _currentContext.displayTableContent();
             _currentContext.setupTableColumns();
+            btnGeneratePDF.setVisible(false);
         });
 
         // Handle button click events
@@ -136,13 +143,20 @@ public class MainController {
 
     @FXML
     private void buttonGeneratePDFClicked(MouseEvent mouseEvent) {
+        final String userHome = System.getProperty("user.home");
+        final String pdfPath = userHome + "\\Documents\\fees.pdf"; // Saves to the Documents folder
+        try {
+            PDFGenerator.generateInvoice(pdfPath);
+        } catch (FileNotFoundException | MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
         // Call generatePDF method from FeesContext
-        if (_currentContext != null) {
+        /*if (_currentContext != null) {
             try {
                 _currentContext.generatePDF(); // Specify the correct file path
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-        }
+        }*/
     }
 }
