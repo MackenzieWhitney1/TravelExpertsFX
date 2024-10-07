@@ -11,6 +11,8 @@ import org.example.travelexpertsfx.data.AgentDB;
 import org.example.travelexpertsfx.models.Agent;
 import org.example.travelexpertsfx.Mode;
 
+import static org.example.travelexpertsfx.Validator.validateNonEmptyEntry;
+
 public class AgentDialogController extends BaseDialogController<Agent, Integer> {
 
     @FXML // fx:id="btnCancel"
@@ -126,20 +128,23 @@ public class AgentDialogController extends BaseDialogController<Agent, Integer> 
 
     private Agent collectAgent() {
         int agentId = 0;
-        if(!tfAgentId.getText().isEmpty()){
+        if (!tfAgentId.getText().isEmpty()) {
             agentId = Integer.parseInt(tfAgentId.getText());
         }
         int agencyId = cbAgencyId.getSelectionModel().getSelectedItem();
-        return new Agent(
-                agentId,
-                tfAgtFirstName.getText(),
-                tfAgtMiddleInitial.getText(),
-                tfAgtLastName.getText(),
-                tfAgtBusPhone.getText(),
-                tfAgtEmail.getText(),
-                tfAgtPosition.getText(),
-                agencyId
-        );
+        if (validateAgentInputs()) {
+            return new Agent(
+                    agentId,
+                    tfAgtFirstName.getText(),
+                    tfAgtMiddleInitial.getText(),
+                    tfAgtLastName.getText(),
+                    tfAgtBusPhone.getText(),
+                    tfAgtEmail.getText(),
+                    tfAgtPosition.getText(),
+                    agencyId
+            );
+        }
+        return null;
     }
 
     public void displayAgent(Agent agent) {
@@ -154,4 +159,38 @@ public class AgentDialogController extends BaseDialogController<Agent, Integer> 
 
     } // public because it's called from dialog controller
 
+    private boolean validateAgentInputs() {
+        StringBuilder errorMsg = new StringBuilder();
+
+        if(!validateNonEmptyEntry(tfAgtFirstName)){
+            errorMsg.append("First name cannot be empty.\n");
+        }
+
+        // middle initial is allowed to be null
+
+        if(!validateNonEmptyEntry(tfAgtLastName)){
+            errorMsg.append("Last name cannot be empty.\n");
+        }
+
+        if(!validateNonEmptyEntry(tfAgtBusPhone)){
+            errorMsg.append("Business phone cannot be empty.\n");
+        }
+
+        if(!validateNonEmptyEntry(tfAgtEmail)){
+            errorMsg.append("Email cannot be empty.\n");
+        }
+
+        if(!validateNonEmptyEntry(tfAgtPosition)){
+            errorMsg.append("Position cannot be empty.\n");
+        }
+
+        // cbAgencyId not validated against.
+
+        if (!errorMsg.isEmpty()) {
+            displayAlert(Alert.AlertType.ERROR, mode, String.valueOf(errorMsg));
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

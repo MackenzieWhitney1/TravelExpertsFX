@@ -1,4 +1,5 @@
 package org.example.travelexpertsfx;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
 import java.util.ArrayList;
@@ -23,6 +24,13 @@ public class Validator {
             return false;
         }
         return validateNonEmptyEntry(textField);
+    }
+    public static boolean validateDateSelected(DatePicker datePicker){
+        return datePicker.getValue() != null;
+    }
+
+    public static boolean validateDateBeforeOtherDate(DatePicker startDatePicker, DatePicker endDatePicker){
+        return endDatePicker.getValue().isAfter(startDatePicker.getValue());
     }
 
 }

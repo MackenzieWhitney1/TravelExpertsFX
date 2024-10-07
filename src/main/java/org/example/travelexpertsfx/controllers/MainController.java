@@ -75,7 +75,7 @@ public class MainController {
         _currentContext = new FeesContext(tbFee);
         _currentContext.displayTableContent();
         _currentContext.setupTableColumns();
-
+      
         // Handle tab change events
         fxTabFee.setOnSelectionChanged(event -> {
             _currentContext = new FeesContext(tbFee);
