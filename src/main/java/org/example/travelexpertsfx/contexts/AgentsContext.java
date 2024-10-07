@@ -11,6 +11,7 @@ import org.example.travelexpertsfx.DatabaseHelper;
 import org.example.travelexpertsfx.TravelExpertsApplication;
 import org.example.travelexpertsfx.controllers.AgentDialogController;
 import org.example.travelexpertsfx.data.AgentDB;
+import org.example.travelexpertsfx.models.Agency;
 import org.example.travelexpertsfx.models.Agent;
 import org.example.travelexpertsfx.Mode;
 
@@ -62,4 +63,15 @@ public class AgentsContext implements ITableContext {
     }
 
     public void generatePDF() {}
+
+    public Object getSelected() {
+        return agentTable.getSelectionModel().getSelectedItem();
+    }
+    public int getSelectedInfoId() {
+        int index = agentTable.getSelectionModel().getSelectedIndex(); //Gets index of selected row
+        return data.get(index).getAgencyId(); //Gets the info field of the row, in this case Agency Id
+    }
+    public void selectInfo(int selected) {
+        agentTable.getSelectionModel().select(selected);
+    }
 }

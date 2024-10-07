@@ -69,4 +69,14 @@ public class PackagesContext implements ITableContext {
     public void generatePDF() {
 
     }
+
+    public Object getSelected() {
+        return packageTable.getSelectionModel().getSelectedItem();
+    }
+    public int getSelectedInfoId() {
+        return -1; //Has no info field
+    }
+    public void selectInfo(int selected) {
+        packageTable.getSelectionModel().select(selected);
+    }
 }
