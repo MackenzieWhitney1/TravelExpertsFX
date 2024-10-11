@@ -30,7 +30,7 @@ public class Validator {
     }
 
     public static boolean validateDateBeforeOtherDate(DatePicker startDatePicker, DatePicker endDatePicker){
-        return endDatePicker.getValue().isAfter(startDatePicker.getValue());
+        return (endDatePicker.getValue()).isAfter(startDatePicker.getValue());
     }
 
 }

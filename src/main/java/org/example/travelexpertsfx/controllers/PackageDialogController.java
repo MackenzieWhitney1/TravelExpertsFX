@@ -157,7 +157,7 @@ public class PackageDialogController extends BaseDialogController<MyPackage, Int
         }
         if(validateDateSelected(dpPkgStartDate) &&
                 validateDateSelected(dpPkgEndDate) &&
-                !validateDateBeforeOtherDate(dpPkgStartDate, dpPkgStartDate)
+                !validateDateBeforeOtherDate(dpPkgStartDate, dpPkgEndDate)
         ){
             errorMsg.append("Start Date must be before End Date.\n");
         }
