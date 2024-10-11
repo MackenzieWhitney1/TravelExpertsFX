@@ -1,0 +1,13 @@
+CREATE TABLE `travelexperts`.`fees_audits` (`FeeID` VARCHAR(10) NOT NULL , `FeeName` VARCHAR(50) NOT NULL, `FeeAmt` DECIMAL(19, 4) NOT NULL, `FeeDesc` VARCHAR(50) NULL, `AuditDate` DATETIME NULL DEFAULT NULL , `AuditOperation` VARCHAR(50) NULL DEFAULT NULL ) ENGINE = InnoDB;
+
+CREATE TRIGGER `FeesDeleteAuditor` AFTER DELETE ON `fees`
+ FOR EACH ROW INSERT INTO fees_audits VALUES(FeeID,FeeName,FeeAmt,FeeDesc,AuditDate,AuditOperation)
+SELECT OLD.FeeID, OLD.FeeName, OLD.FeeAmt, OLD.FeeDesc,NOW(),'Delete'
+
+CREATE TRIGGER `FeesInsertAuditor` AFTER INSERT ON `fees`
+ FOR EACH ROW INSERT INTO fees_audits VALUES(FeeID,FeeName,FeeAmt,FeeDesc,AuditDate,AuditOperation)
+SELECT NEW.FeeId,NEW.FeeName,NEW.FeeAmt,NEW.FeeDesc,NOW(),'Insert'
+
+CREATE TRIGGER `FeesUpdateAuditor` AFTER UPDATE ON `fees`
+ FOR EACH ROW INSERT INTO fees_audits VALUES(FeeID,FeeName,FeeAmt,FeeDesc,AuditDate,AuditOperation)
+SELECT NEW.FeeID,NEW.FeeName,NEW.FeeAmt,NEW.FeeDesc,NOW(),'Update'
