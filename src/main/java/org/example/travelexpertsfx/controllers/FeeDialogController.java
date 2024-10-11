@@ -119,8 +119,13 @@ public class FeeDialogController extends BaseDialogController<Fee, String> {
         if (!validateNonEmptyEntry(tfFeeName)) {
             errorMsg.append("Name cannot be empty.\n");
         }
+        double CURRENCY_MAX = 10000.00;
         if (!validateNonEmptyPositiveDouble(tfFeeAmount)) {
             errorMsg.append("Fee Amount must be a positive double.");
+        }else if (!validateDoubleLessThanMax(tfFeeAmount, CURRENCY_MAX)){
+            errorMsg.append("Fee Amount must be less than ").append(CURRENCY_MAX).append(".");
+        } else if (!validateDoubleHasTwoDecimalPrecision(tfFeeAmount)) {
+            errorMsg.append("Fee Amount can have at most two decimal places of precision.");
         }
         if (!errorMsg.isEmpty()) {
             displayAlert(Alert.AlertType.ERROR, mode, String.valueOf(errorMsg));

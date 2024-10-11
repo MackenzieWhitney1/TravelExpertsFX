@@ -1,6 +1,7 @@
 package org.example.travelexpertsfx;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,15 @@ public class Validator {
             return false;
         }
         return validateNonEmptyEntry(textField);
+    }
+
+    public static boolean validateDoubleHasTwoDecimalPrecision(TextField textField){
+        String value = textField.getText();
+        return value.matches("^\\d+(\\.\\d{1,2})?$");
+    }
+
+    public static boolean validateDoubleLessThanMax(TextField textField, Double max){
+        return Double.parseDouble(textField.getText()) < max;
     }
     public static boolean validateDateSelected(DatePicker datePicker){
         return datePicker.getValue() != null;

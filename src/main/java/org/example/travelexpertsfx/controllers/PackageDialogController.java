@@ -166,13 +166,23 @@ public class PackageDialogController extends BaseDialogController<MyPackage, Int
             errorMsg.append("Email cannot be empty.\n");
         }
 
+        double CURRENCY_MAX = 10000.00;
         if(!validateNonEmptyPositiveDouble(tfPkgBasePrice)){
             errorMsg.append("Base price must be a positive double.\n");
+        } else if (!validateDoubleLessThanMax(tfPkgBasePrice, CURRENCY_MAX)){
+            errorMsg.append("Base price must be less than ").append(CURRENCY_MAX).append(".\n");
+        } else if (!validateDoubleHasTwoDecimalPrecision(tfPkgBasePrice)) {
+            errorMsg.append("Base price can have at most two decimal places of precision.\n");
         }
 
         if(!validateNonEmptyPositiveDouble(tfPkgAgencyCommission)){
             errorMsg.append("Agency commission must be a positive double.\n");
+        } else if (!validateDoubleLessThanMax(tfPkgAgencyCommission, CURRENCY_MAX)){
+            errorMsg.append("Agency commission must be less than ").append(CURRENCY_MAX).append(".\n");
+        } else if (!validateDoubleHasTwoDecimalPrecision(tfPkgAgencyCommission)) {
+            errorMsg.append("Agency commission can have at most two decimal places of precision.\n");
         }
+
 
         if (!errorMsg.isEmpty()) {
             displayAlert(Alert.AlertType.ERROR, mode, String.valueOf(errorMsg));
