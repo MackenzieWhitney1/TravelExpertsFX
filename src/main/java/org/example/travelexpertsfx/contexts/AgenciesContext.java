@@ -64,7 +64,39 @@ public class AgenciesContext implements ITableContext {
         DatabaseHelper.setupTableColumns(agencyTable, "agencies", Agency.class);
     }
 
-    public void generatePDF() {}
+    public void generatePDF() {
+        /*// Create a PDF writer
+            PdfWriter writer = new PdfWriter(new File(pdfPath));
+            PdfDocument pdfDoc = new PdfDocument(writer);
+            Document document = new Document(pdfDoc);
+
+            // Add a title
+            document.add(new Paragraph("Fees Report"));
+
+            // Create a table with columns
+            Table table = new Table(4); // Adjust the number of columns based on your data
+
+            // Add table headers
+            table.addCell("Fee ID");
+            table.addCell("Fee Name");
+            table.addCell("Fee Amount");
+            table.addCell("Fee Description");
+
+            // Populate the table with data from feeTable
+            ObservableList<Fee> fees = feeTable.getItems();
+            for (Fee fee : fees) {
+                table.addCell(fee.getFeeId());
+                table.addCell(fee.getFeeName());
+                table.addCell(String.valueOf(fee.getFeeAmt()));
+                table.addCell(fee.getFeeDesc() != null ? fee.getFeeDesc() : "N/A");
+            }
+
+            // Add the table to the document
+            document.add(table);
+            document.close();
+
+            System.out.println("PDF created successfully at: " + pdfPath);*/
+    }
 
     public Object getSelected() {
         return agencyTable.getSelectionModel().getSelectedItem();
