@@ -122,4 +122,8 @@ public class FeesContext implements ITableContext {
     public void selectInfo(int selected) {
         feeTable.getSelectionModel().select(selected);
     }
+    @Override
+    public void audit(){
+
+    }
 }

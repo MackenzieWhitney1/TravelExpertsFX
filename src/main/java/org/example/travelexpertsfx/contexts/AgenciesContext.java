@@ -75,4 +75,8 @@ public class AgenciesContext implements ITableContext {
     public void selectInfo(int selected) {
         agencyTable.getSelectionModel().select(selected -1); //selects the item index which is 0-based. TODO: select column with matching PK instead
     }
+    @Override
+    public void audit(){
+
+    }
 }

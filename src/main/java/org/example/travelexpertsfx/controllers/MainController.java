@@ -11,11 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.example.travelexpertsfx.PDFGenerator;
 import org.example.travelexpertsfx.contexts.*;
-import org.example.travelexpertsfx.models.Agency;
-import org.example.travelexpertsfx.models.Agent;
-import org.example.travelexpertsfx.models.Fee;
+import org.example.travelexpertsfx.models.*;
 import org.example.travelexpertsfx.Mode;
-import org.example.travelexpertsfx.models.MyPackage;
 
 public class MainController {
 
@@ -38,6 +35,9 @@ public class MainController {
     private Button btnExit;
 
     @FXML
+    private Button btnAudit;
+
+    @FXML
     private TabPane fxTabs;
 
     @FXML
@@ -53,6 +53,9 @@ public class MainController {
     private Tab fxTabPackage;
 
     @FXML
+    private Tab fxTabBooking;
+
+    @FXML
     private TableView<Agent> tbAgent;
 
     @FXML
@@ -63,6 +66,9 @@ public class MainController {
 
     @FXML
     private TableView<MyPackage> tbPackage;
+
+    @FXML
+    private TableView<Booking> tbBooking;
 
 
     private ITableContext _currentContext;
@@ -78,6 +84,7 @@ public class MainController {
         _currentContext = new FeesContext(tbFee);
         _currentContext.displayTableContent();
         _currentContext.setupTableColumns();
+        btnAudit.setVisible(false);
       
         // Handle tab change events
         fxTabFee.setOnSelectionChanged(event -> {
@@ -85,6 +92,7 @@ public class MainController {
             _currentContext.displayTableContent();
             _currentContext.setupTableColumns();
             btnGeneratePDF.setVisible(true);
+            btnAudit.setVisible(false);
         });
 
         fxTabAgent.setOnSelectionChanged(event -> {
@@ -92,6 +100,7 @@ public class MainController {
             _currentContext.displayTableContent();
             _currentContext.setupTableColumns();
             btnGeneratePDF.setVisible(false);
+            btnAudit.setVisible(false);
         });
 
         fxTabAgency.setOnSelectionChanged(event -> {
@@ -99,6 +108,7 @@ public class MainController {
             _currentContext.displayTableContent();
             _currentContext.setupTableColumns();
             btnGeneratePDF.setVisible(false);
+            btnAudit.setVisible(false);
         });
 
         fxTabPackage.setOnSelectionChanged(event -> {
@@ -106,6 +116,15 @@ public class MainController {
             _currentContext.displayTableContent();
             _currentContext.setupTableColumns();
             btnGeneratePDF.setVisible(false);
+            btnAudit.setVisible(false);
+        });
+
+        fxTabBooking.setOnSelectionChanged(event -> {
+            _currentContext = new BookingsContext(tbBooking);
+            _currentContext.displayTableContent();
+            _currentContext.setupTableColumns();
+            btnGeneratePDF.setVisible(false);
+            btnAudit.setVisible(true);
         });
 
         // Handle button click events
@@ -132,6 +151,7 @@ public class MainController {
                case "fxTabAgency": break;
                case "fxTabFee": break;
                case "fxTabPackage": break;
+               case "fxTabBooking":break;
            }
            _currentContext.selectInfo(selected); //select the item with the id that corresponds to our info field, defined in the target context
         });
@@ -139,6 +159,10 @@ public class MainController {
         btnExit.setOnMouseClicked(event -> System.exit(0));
 
         btnGeneratePDF.setOnMouseClicked(this::buttonGeneratePDFClicked);
+
+        btnAudit.setOnMouseClicked(event ->{
+            _currentContext.audit();
+        });
     }
 
     @FXML
