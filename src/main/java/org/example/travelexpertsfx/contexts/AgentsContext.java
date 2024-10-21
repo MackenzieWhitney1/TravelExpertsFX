@@ -74,4 +74,8 @@ public class AgentsContext implements ITableContext {
     public void selectInfo(int selected) {
         agentTable.getSelectionModel().select(selected);
     }
+    @Override
+    public void audit(){
+
+    }
 }

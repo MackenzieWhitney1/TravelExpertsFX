@@ -79,4 +79,8 @@ public class PackagesContext implements ITableContext {
     public void selectInfo(int selected) {
         packageTable.getSelectionModel().select(selected);
     }
+    @Override
+    public void audit(){
+
+    }
 }

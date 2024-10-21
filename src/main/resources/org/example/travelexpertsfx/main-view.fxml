@@ -33,6 +33,11 @@
                   <TableView fx:id="tbPackage" prefHeight="200.0" prefWidth="200.0" />
                </content>
             </Tab>
+            <Tab fx:id="fxTabBooking" text="Booking">
+               <content>
+                  <TableView fx:id="tbBooking" prefHeight="200.0" prefWidth="200.0" />
+               </content>
+            </Tab>
         </tabs>
       </TabPane>
    </center>
@@ -61,6 +66,11 @@
                </font>
             </Button>
             <Button fx:id="btnInfo" layoutX="245.0" layoutY="22.0" mnemonicParsing="false" text="View More Info">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnAudit" layoutX="565.0" layoutY="22.0" onMouseClicked="#buttonGeneratePDFClicked" text="Audit">
                <font>
                   <Font size="18.0" />
                </font>

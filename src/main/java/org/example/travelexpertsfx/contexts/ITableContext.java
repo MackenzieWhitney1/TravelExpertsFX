@@ -11,4 +11,5 @@ public interface ITableContext {
     public Object getSelected();
     public int getSelectedInfoId();
     public void selectInfo(int selected);
+    public void audit();
 }
