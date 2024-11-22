@@ -6,6 +6,7 @@ module org.example.travelexpertsfx {
     requires java.sql;
     requires kernel;
     requires layout;
+    requires mysql.connector.j;
 
     opens org.example.travelexpertsfx.models to javafx.base;
     exports org.example.travelexpertsfx;

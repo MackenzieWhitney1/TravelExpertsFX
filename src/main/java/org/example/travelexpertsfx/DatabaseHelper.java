@@ -8,6 +8,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 public class DatabaseHelper {
@@ -90,7 +93,7 @@ public class DatabaseHelper {
         // Set up the cellValueFactory to extract the corresponding property from the data object
         column.setCellValueFactory(cellData -> {
             T data = cellData.getValue();
-            String value;
+            String value = "";
 
             try {
                 // Use reflection to get the getter method based on the field name
@@ -98,15 +101,43 @@ public class DatabaseHelper {
                 Method method = clazz.getMethod(methodName);
                 Object fieldValue = method.invoke(data);
 
-                // Convert the field value to a String
-                value = fieldValue != null ? fieldValue.toString() : "N/A";
+                List<String> moneyColumns = Arrays.asList(
+                        "FeeAmt",
+                        "PkgBasePrice",
+                        "PkgAgencyCommission");
+                /* Convert the field value to a String and append $ if it's a Money column
+                We can't check if fieldValue.getClass() == Double.class since
+                TravelerCount is stored as a double in the database
+                */
+                if(fieldValue != null) {
+                    if (moneyColumns.contains(columnName)) {
+                        value = parseMoneyValue(fieldValue);
+                    } else  {
+                        value = fieldValue.toString();
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
-                return new SimpleStringProperty("N/A");
+                return new SimpleStringProperty("");
             }
-
             return new SimpleStringProperty(value);
         });
         return column;
+    }
+
+    private static String parseMoneyValue(Object fieldValue) {
+        String value = "";
+        if (fieldValue != null) {
+            value = fieldValue.toString();
+        }
+        if(value.contains(".")){
+            String firstPart = value.split("\\.")[0];
+            StringBuilder secondPart = new StringBuilder(value.split("\\.")[1]);
+            while(secondPart.length() < 2){
+                secondPart.append("0");
+            }
+            value = firstPart + "." + secondPart;
+        }
+        return "$"+value;
     }
 }

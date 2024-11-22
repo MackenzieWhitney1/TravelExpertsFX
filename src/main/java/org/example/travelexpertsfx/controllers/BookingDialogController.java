@@ -1,14 +1,19 @@
 package org.example.travelexpertsfx.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.StringConverter;
 import org.example.travelexpertsfx.Mode;
-import org.example.travelexpertsfx.data.BookingDB;
+import org.example.travelexpertsfx.data.*;
 import org.example.travelexpertsfx.models.Booking;
 
 import java.sql.SQLException;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 import static org.example.travelexpertsfx.Validator.*;
 
@@ -20,6 +25,15 @@ public class BookingDialogController extends BaseDialogController<Booking,Intege
     private TextField tfBookingId;
 
     @FXML
+    private ComboBox<Integer> cbCustomer;
+
+    @FXML
+    private ComboBox<Integer> cbPackage;
+
+    @FXML
+    private ComboBox<String> cbTripType;
+
+    @FXML
     private DatePicker dpBookingDate;
 
     @FXML
@@ -27,15 +41,6 @@ public class BookingDialogController extends BaseDialogController<Booking,Intege
 
     @FXML
     private TextField tfTravelerCount;
-
-    @FXML
-    private TextField tfCustomerId;
-
-    @FXML
-    private TextField tfTripTypeId;
-
-    @FXML
-    private TextField tfPackageId;
 
     @FXML
     private Button btnSave;
@@ -53,9 +58,9 @@ public class BookingDialogController extends BaseDialogController<Booking,Intege
         assert dpBookingDate != null :"\"fx:id=\"dpBookingDate\" was not injected: check your FXML file 'booking-dialog-view.fxml'.";
         assert tfBookingNo != null :"\"fx:id=\"tfBookingNo\" was not injected: check your FXML file 'booking-dialog-view.fxml'.";
         assert tfTravelerCount != null :"\"fx:id=\"tfTravelerCount\" was not injected: check your FXML file 'booking-dialog-view.fxml'.";
-        assert tfCustomerId != null :"\"fx:id=\"tfCustomerId\" was not injected: check your FXML file 'booking-dialog-view.fxml'.";
-        assert tfTripTypeId != null :"\"fx:id=\"tfTripTypeId\" was not injected: check your FXML file 'booking-dialog-view.fxml'.";
-        assert tfPackageId != null :"\"fx:id=\"tfPackageId\" was not injected: check your FXML file 'booking-dialog-view.fxml'.";
+        assert cbCustomer != null : "fx:id=\"cbCustomer\" was not injected: check your FXML file 'booking-dialog-view.fxml'.";
+        assert cbPackage != null : "fx:id=\"cbPackage\" was not injected: check your FXML file 'booking-dialog-view.fxml'.";
+        assert cbTripType != null : "fx:id=\"cbTripType\" was not injected: check your FXML file 'booking-dialog-view.fxml'.";
         assert btnSave!= null :"\"fx:id=\"btnSave\" was not injected: check your FXML file 'booking-dialog-view.fxml'.";
         assert btnCancel != null :"\"fx:id=\"btnCancel\" was not injected: check your FXML file 'booking-dialog-view.fxml'.";
         assert btnDelete!= null :"\"fx:id=\"btnDelete\" was not injected: check your FXML file 'booking-dialog-view.fxml'.";
@@ -68,7 +73,81 @@ public class BookingDialogController extends BaseDialogController<Booking,Intege
             buttonDeleteClicked();
             closeStage(btnDelete);
         });
+        loadCustomerComboBox();
+        loadTripTypeComboBox();
+        loadPackageComboBox();
 
+    }
+
+    private void loadCustomerComboBox() {
+        Map<Integer, String> customers;
+        try {
+            customers = CustomerDB.getCustomerComboBoxMap();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        ObservableList<Integer> customerIds = FXCollections.observableList(customers.keySet().stream().toList());
+        cbCustomer.setItems(customerIds);
+        // Custom StringConverter to display names instead of IDs
+        cbCustomer.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Integer id) {
+                return customers.get(id); // Display the customer's name
+            }
+
+            @Override
+            public Integer fromString(String s) {
+                return 0;
+            }
+        });
+    }
+    private void loadTripTypeComboBox() {
+        Map<String, String> tripTypes;
+        try {
+            tripTypes = TripTypeDB.getTripTypeComboBoxMap();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        ObservableList<String> tripTypeIds = FXCollections.observableList(tripTypes.keySet().stream().toList());
+        cbTripType.setItems(tripTypeIds);
+        // Custom StringConverter to display names instead of IDs
+        cbTripType.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(String id) {
+                return tripTypes.get(id); // Display the trip type's name
+            }
+
+            @Override
+            public String fromString(String s) {
+                return "";
+            }
+        });
+    }
+
+    private void loadPackageComboBox() {
+        Map<Integer, String> packages;
+        try {
+            packages = PackageDB.getPackageComboBoxMap();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        ObservableList<Integer> packageIds = FXCollections.observableList(packages.keySet().stream().toList());
+        cbPackage.setItems(packageIds);
+        // Custom StringConverter to display names instead of IDs
+        cbPackage.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Integer id) {
+                return packages.get(id); // Display the package's name
+            }
+
+            @Override
+            public Integer fromString(String s) {
+                return 0;
+            }
+        });
     }
 
     private void buttonDeleteClicked(){
@@ -82,14 +161,21 @@ public class BookingDialogController extends BaseDialogController<Booking,Intege
         dpBookingDate.setValue(sqlBookingDate.toLocalDate());
         tfBookingNo.setText(booking.getBookingNo());
         tfTravelerCount.setText(booking.getTravelerCount()+"");
-        tfCustomerId.setText(booking.getCustomerId()+"");
-        tfTripTypeId.setText(booking.getTripTypeId());
-        tfPackageId.setText(booking.getPackageId()+"");
+        cbCustomer.setValue(booking.getCustomerId());
+        cbTripType.setValue(booking.getTripTypeId());
+        cbPackage.setValue(booking.getPackageId());
     }
     public void setMode(Mode mode){
         this.mode = mode;
         lblMode.setText(mode+" Booking");
         btnDelete.setVisible(!mode.equals(Mode.ADD));
+        if(mode.equals(Mode.ADD)) {
+            cbCustomer.getSelectionModel().select(0);
+
+            // if package should be optional, change this and handle add/edits to null.
+            cbPackage.getSelectionModel().select(0);
+            cbTripType.getSelectionModel().select(0);
+        }
     }
 
     private void buttonSaveClicked(){
@@ -107,15 +193,19 @@ public class BookingDialogController extends BaseDialogController<Booking,Intege
     }
 
     private Booking collectBooking(){
+        int customerId = cbCustomer.getSelectionModel().getSelectedItem();
+        String tripTypeId = cbTripType.getSelectionModel().getSelectedItem();
+        int packageId = cbPackage.getSelectionModel().getSelectedItem();
+
         if(validateBookingInputs()) {
             return new Booking(
                     Integer.parseInt(tfBookingId.getText()),
                     Date.from(dpBookingDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),
                     tfBookingNo.getText(),
                     Double.parseDouble(tfTravelerCount.getText()),
-                    Integer.parseInt(tfCustomerId.getText()),
-                    tfTripTypeId.getText(),
-                    Integer.parseInt(tfPackageId.getText())
+                    customerId,
+                    tripTypeId,
+                    packageId
                     );
         }
         return null;
@@ -136,15 +226,7 @@ public class BookingDialogController extends BaseDialogController<Booking,Intege
         if(!validateNonEmptyPositiveDouble(tfTravelerCount)){
             errorMsg.append("Traveler Count must be a valid positive number.\n");
         }
-        if(!validateNonEmptyPositiveInteger(tfCustomerId)){
-            errorMsg.append("Customer ID must be a valid positive integer.\n");
-        }
-        if(!validateNonEmptyWithinLength(tfTripTypeId,1)){
-            errorMsg.append("Trip Type ID must be exactly 1 character.\n");
-        }
-        if(!validateNonEmptyPositiveInteger(tfPackageId)){
-            errorMsg.append("Package ID must be a valid positive integer.\n");
-        }
+
         if (errorMsg.isEmpty()) {
             return true;
         } else {

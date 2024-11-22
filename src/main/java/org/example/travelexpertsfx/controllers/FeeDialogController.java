@@ -121,7 +121,7 @@ public class FeeDialogController extends BaseDialogController<Fee, String> {
         }
         double CURRENCY_MAX = 10000.00;
         if (!validateNonEmptyPositiveDouble(tfFeeAmount)) {
-            errorMsg.append("Fee Amount must be a positive double.");
+            errorMsg.append("Fee Amount must be a positive number.");
         }else if (!validateDoubleLessThanMax(tfFeeAmount, CURRENCY_MAX)){
             errorMsg.append("Fee Amount must be less than ").append(CURRENCY_MAX).append(".");
         } else if (!validateDoubleHasTwoDecimalPrecision(tfFeeAmount)) {
