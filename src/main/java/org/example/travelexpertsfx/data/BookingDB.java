@@ -78,9 +78,8 @@ public class BookingDB {
     public static int deleteBooking(int bookingId) throws SQLException{
         int numrows = 0;
         Connection conn = DatabaseHelper.getConnection();
-        String sql = "DELETE FROM Bookings WHERE BookingsId = ?";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setInt(1,bookingId);
+        String sql = "DELETE FROM Bookings WHERE BookingId = ?";
+        numrows = DatabaseHelper.createPreparedStatementExecute(conn, sql, bookingId);
         conn.close();
         return numrows;
     }
