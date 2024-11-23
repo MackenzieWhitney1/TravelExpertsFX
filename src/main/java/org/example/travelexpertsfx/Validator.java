@@ -1,8 +1,7 @@
 package org.example.travelexpertsfx;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import org.w3c.dom.Text;
-
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Validator {
@@ -59,6 +58,10 @@ public class Validator {
 
     public static boolean validateDateBeforeOtherDate(DatePicker startDatePicker, DatePicker endDatePicker){
         return (endDatePicker.getValue()).isAfter(startDatePicker.getValue());
+    }
+
+    public static boolean validateDateAfterNow(DatePicker datePicker){
+        return (datePicker.getValue()).isAfter(LocalDate.now());
     }
 
 }

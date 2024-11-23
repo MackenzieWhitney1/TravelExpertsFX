@@ -6,7 +6,8 @@ import org.example.travelexpertsfx.DatabaseHelper;
 import org.example.travelexpertsfx.models.MyPackage;
 
 import java.sql.*;
-import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PackageDB {
     public static ObservableList<MyPackage> getPackages() throws SQLException {
@@ -86,5 +87,21 @@ public class PackageDB {
         numRows = stmt.executeUpdate();
         conn.close();
         return numRows;
+    }
+
+    public static Map<Integer, String> getPackageComboBoxMap() throws SQLException {
+        Map<Integer, String> packages = new HashMap<>();
+        int nextId;
+        String nextName;
+        Connection conn = DatabaseHelper.getConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("select PackageId, PkgName from packages order by PackageId");
+        while(rs.next()){
+            nextId = rs.getInt(1);
+            nextName = rs.getString(2);
+            packages.put(nextId, nextName);
+        }
+        conn.close();
+        return packages;
     }
 } // end class

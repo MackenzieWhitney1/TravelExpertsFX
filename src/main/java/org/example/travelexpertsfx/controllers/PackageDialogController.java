@@ -161,6 +161,9 @@ public class PackageDialogController extends BaseDialogController<MyPackage, Int
         ){
             errorMsg.append("Start Date must be before End Date.\n");
         }
+        if(mode.equals(Mode.ADD) && !validateDateAfterNow(dpPkgStartDate)){
+            errorMsg.append("Start Date must be after today when adding a new package.\n");
+        }
 
         if(!validateNonEmptyEntry(tfPkgDesc)){
             errorMsg.append("Email cannot be empty.\n");
@@ -168,7 +171,7 @@ public class PackageDialogController extends BaseDialogController<MyPackage, Int
 
         double CURRENCY_MAX = 10000.00;
         if(!validateNonEmptyPositiveDouble(tfPkgBasePrice)){
-            errorMsg.append("Base price must be a positive double.\n");
+            errorMsg.append("Base price must be a positive number.\n");
         } else if (!validateDoubleLessThanMax(tfPkgBasePrice, CURRENCY_MAX)){
             errorMsg.append("Base price must be less than ").append(CURRENCY_MAX).append(".\n");
         } else if (!validateDoubleHasTwoDecimalPrecision(tfPkgBasePrice)) {
@@ -176,7 +179,7 @@ public class PackageDialogController extends BaseDialogController<MyPackage, Int
         }
 
         if(!validateNonEmptyPositiveDouble(tfPkgAgencyCommission)){
-            errorMsg.append("Agency commission must be a positive double.\n");
+            errorMsg.append("Agency commission must be a positive number.\n");
         } else if (!validateDoubleLessThanMax(tfPkgAgencyCommission, CURRENCY_MAX)){
             errorMsg.append("Agency commission must be less than ").append(CURRENCY_MAX).append(".\n");
         } else if (!validateDoubleHasTwoDecimalPrecision(tfPkgAgencyCommission)) {
